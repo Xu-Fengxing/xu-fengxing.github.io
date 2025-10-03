@@ -19,22 +19,22 @@ export default function FriendsPage() {
     <div className="flex min-h-screen">
       <Sidebar />
       <main className="flex-1 lg:ml-64">
-        <div className="max-w-6xl mx-auto px-6 py-8 h-screen flex flex-col">
+        <div className="max-w-6xl mx-auto px-6 py-20 h-screen flex flex-col">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-4"
+            className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-8"
           >
             <ArrowLeft className="h-4 w-4" />
             返回首页
           </Link>
 
-          <div className="text-center mb-6">
+          <div className="text-center mb-12">
             <h1 className="text-3xl md:text-4xl font-bold mb-2">友链</h1>
             <p className="text-muted-foreground text-base">发现更多优秀的博客和网站</p>
           </div>
 
           <div className="flex-1 flex flex-col justify-center">
-            <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3 max-w-5xl mx-auto w-full">
+            <div className="grid gap-6 grid-cols-2 max-w-4xl mx-auto w-full">
               {friends.map((friend, index) => (
                 <article
                   key={index}
@@ -80,9 +80,9 @@ export default function FriendsPage() {
                 </article>
               ))}
               
-              {/* 占位符 - 确保每行都有3个元素 */}
-              {Array.from({ length: (3 - (friends.length % 3)) % 3 }).map((_, index) => (
-                <div key={`placeholder-${index}`} className="hidden lg:block">
+              {/* 占位符 - 确保每行都有2个元素 */}
+              {Array.from({ length: (2 - (friends.length % 2)) % 2 }).map((_, index) => (
+                <div key={`placeholder-${index}`}>
                   <div className="rounded-xl border border-dashed border-border/30 bg-card/30 p-5 h-full min-h-[240px] flex items-center justify-center">
                     <div className="text-center text-muted-foreground/50">
                       <div className="w-14 h-14 rounded-full bg-muted/30 flex items-center justify-center mx-auto mb-4">
