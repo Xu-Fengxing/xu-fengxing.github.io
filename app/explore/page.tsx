@@ -1,12 +1,25 @@
 "use client"
 
 import { Sidebar } from "@/components/sidebar"
-import { ArrowLeft, ExternalLink } from "lucide-react"
+import { ArrowLeft, ExternalLink, ChevronLeft, ChevronRight } from "lucide-react"
 import Link from "next/link"
-import { useState } from "react"
+import { useState, useRef } from "react"
 
 export default function ExplorePage() {
   const [activeCategory, setActiveCategory] = useState("all")
+  const scrollContainerRef = useRef<HTMLDivElement>(null)
+
+  const scrollLeft = () => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollBy({ left: -200, behavior: 'smooth' })
+    }
+  }
+
+  const scrollRight = () => {
+    if (scrollContainerRef.current) {
+      scrollContainerRef.current.scrollBy({ left: 200, behavior: 'smooth' })
+    }
+  }
 
   const categories = [
     { id: "all", name: "全部", icon: "🌐" },
@@ -217,7 +230,7 @@ export default function ExplorePage() {
       <Sidebar />
       <main className="flex-1 lg:ml-64">
         <div className="max-w-6xl mx-auto px-4 md:px-6 py-16 md:py-20">
-          <div className="max-w-4xl mx-auto">
+          <div className="max-w-xs sm:max-w-sm md:max-w-4xl mx-auto">
             <Link
               href="/"
               className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-6 md:mb-8"
@@ -233,21 +246,42 @@ export default function ExplorePage() {
 
             {/* 分类导航 */}
             <div className="mb-8">
-              <div className="flex gap-3 overflow-x-auto pb-4 scrollbar-hide">
-                {categories.map((category) => (
-                  <button
-                    key={category.id}
-                    onClick={() => setActiveCategory(category.id)}
-                    className={`flex items-center gap-2 px-4 py-2 rounded-full whitespace-nowrap transition-all ${
-                      activeCategory === category.id
-                        ? "bg-accent text-accent-foreground shadow-md"
-                        : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
-                    }`}
-                  >
-                    <span className="text-lg">{category.icon}</span>
-                    <span className="font-medium">{category.name}</span>
-                  </button>
-                ))}
+              <div className="relative">
+                {/* 左箭头 - 只在桌面端显示 */}
+                <button
+                  onClick={scrollLeft}
+                  className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 items-center justify-center bg-background/80 backdrop-blur-sm border border-border rounded-full hover:bg-accent hover:text-accent-foreground transition-colors shadow-lg"
+                >
+                  <ChevronLeft className="w-4 h-4" />
+                </button>
+                
+                {/* 右箭头 - 只在桌面端显示 */}
+                <button
+                  onClick={scrollRight}
+                  className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 items-center justify-center bg-background/80 backdrop-blur-sm border border-border rounded-full hover:bg-accent hover:text-accent-foreground transition-colors shadow-lg"
+                >
+                  <ChevronRight className="w-4 h-4" />
+                </button>
+                
+                <div 
+                  ref={scrollContainerRef}
+                  className="flex gap-3 overflow-x-auto pb-4 scrollbar-hide md:px-10"
+                >
+                  {categories.map((category) => (
+                    <button
+                      key={category.id}
+                      onClick={() => setActiveCategory(category.id)}
+                      className={`flex items-center gap-2 px-3 md:px-4 py-2 rounded-full whitespace-nowrap transition-all text-sm md:text-base ${
+                        activeCategory === category.id
+                          ? "bg-accent text-accent-foreground shadow-md"
+                          : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+                      }`}
+                    >
+                      <span className="text-base md:text-lg">{category.icon}</span>
+                      <span className="font-medium">{category.name}</span>
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
 
@@ -271,24 +305,24 @@ export default function ExplorePage() {
                 {communities[activeCategory as keyof typeof communities]?.map((community, index) => (
                   <div
                     key={index}
-                    className="group rounded-xl border border-border bg-card p-6 transition-all hover:border-accent hover:shadow-lg hover:shadow-accent/10 hover:-translate-y-1"
+                    className="group rounded-xl border border-border bg-card p-4 md:p-6 transition-all hover:border-accent hover:shadow-lg hover:shadow-accent/10 hover:-translate-y-1"
                   >
-                    <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-accent/30 via-accent/20 to-accent/10 flex items-center justify-center flex-shrink-0">
-                        <span className="text-2xl">{community.icon}</span>
+                    <div className="flex items-start gap-3 md:gap-4">
+                      <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-gradient-to-br from-accent/30 via-accent/20 to-accent/10 flex items-center justify-center flex-shrink-0">
+                        <span className="text-xl md:text-2xl">{community.icon}</span>
                       </div>
                       <div className="flex-1 min-w-0">
-                        <h3 className="font-semibold text-lg mb-1 group-hover:text-accent transition-colors">
+                        <h3 className="font-semibold text-base md:text-lg mb-1 group-hover:text-accent transition-colors">
                           {community.name}
                         </h3>
-                        <p className="text-muted-foreground text-sm mb-3 line-clamp-2">
+                        <p className="text-muted-foreground text-xs md:text-sm mb-3 line-clamp-2">
                           {community.description}
                         </p>
                         <div className="flex items-center justify-between">
                           <span className="text-xs text-muted-foreground">
                             {community.members} 成员
                           </span>
-                          <button className="px-4 py-1.5 bg-accent text-accent-foreground rounded-lg hover:bg-accent/90 transition-colors text-sm font-medium">
+                          <button className="px-3 md:px-4 py-1 md:py-1.5 bg-accent text-accent-foreground rounded-lg hover:bg-accent/90 transition-colors text-xs md:text-sm font-medium">
                             加入
                           </button>
                         </div>
