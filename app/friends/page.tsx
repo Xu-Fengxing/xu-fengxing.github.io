@@ -34,7 +34,7 @@ export default function FriendsPage() {
               <p className="text-muted-foreground text-base">发现更多优秀的博客和网站</p>
             </div>
 
-            <div className="grid gap-6 grid-cols-2 lg:grid-cols-3 w-full">
+            <div className="grid gap-6 grid-cols-2 lg:grid-cols-3">
               {friends.map((friend, index) => (
                 <article
                   key={index}

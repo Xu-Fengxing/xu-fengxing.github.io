@@ -225,13 +225,13 @@ export function MBTISection() {
                   <div className="space-y-2 mt-6">
                     <h3 className="text-base font-semibold text-gray-900 dark:text-white text-center">人格统计</h3>
                     <div className="grid grid-cols-2 gap-3">
-                      <div className="text-center p-3 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800/60 dark:to-gray-700/60 rounded-xl border border-gray-200/50 dark:border-gray-600/30">
+                      <div className="text-center p-3 bg-card border border-border rounded-xl">
                         <div className="text-lg font-bold text-accent">5-6%</div>
-                        <div className="text-xs text-gray-600 dark:text-gray-400">人口占比</div>
+                        <div className="text-xs text-muted-foreground">人口占比</div>
                       </div>
-                      <div className="text-center p-3 bg-gradient-to-br from-gray-50 to-gray-100 dark:from-gray-800/60 dark:to-gray-700/60 rounded-xl border border-gray-200/50 dark:border-gray-600/30">
+                      <div className="text-center p-3 bg-card border border-border rounded-xl">
                         <div className="text-lg font-bold text-accent">SP</div>
-                        <div className="text-xs text-gray-600 dark:text-gray-400">探险家组</div>
+                        <div className="text-xs text-muted-foreground">探险家组</div>
                       </div>
                     </div>
                   </div>
