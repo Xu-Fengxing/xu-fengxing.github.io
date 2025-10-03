@@ -79,22 +79,41 @@ export function Hero({ onToggleMBTI }: HeroProps) {
             )
           })}
         </div>
+
+        {/* V字箭头 - 相对于主内容区域居中 */}
+        <div 
+          className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce pointer-events-auto cursor-pointer hover:scale-110 transition-transform z-10"
+          onClick={onToggleMBTI}
+        >
+          <div className="flex flex-col items-center justify-center gap-2 text-muted-foreground hover:text-accent transition-colors">
+            <i className="fa-solid fa-chevron-down text-2xl" style={{ 
+              fontFamily: '"Font Awesome 6 Free"', 
+              fontWeight: 900,
+              display: 'block',
+              textRendering: 'auto',
+              WebkitFontSmoothing: 'antialiased',
+              textAlign: 'center'
+            }}></i>
+          </div>
+        </div>
       </div>
 
       <div 
         className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce pointer-events-auto cursor-pointer hover:scale-110 transition-transform z-10"
         onClick={onToggleMBTI}
-        style={{ transform: 'translateX(-50%)' }}
+        style={{ 
+          left: 'calc(50% + 8rem)',
+          transform: 'translateX(-50%)'
+        }}
       >
-        <div className="flex flex-col items-center justify-center gap-2 text-muted-foreground hover:text-accent transition-colors w-full">
+        <div className="flex flex-col items-center justify-center gap-2 text-muted-foreground hover:text-accent transition-colors">
           <i className="fa-solid fa-chevron-down text-2xl" style={{ 
             fontFamily: '"Font Awesome 6 Free"', 
             fontWeight: 900,
             display: 'block',
             textRendering: 'auto',
             WebkitFontSmoothing: 'antialiased',
-            textAlign: 'center',
-            margin: '0 auto'
+            textAlign: 'center'
           }}></i>
         </div>
       </div>

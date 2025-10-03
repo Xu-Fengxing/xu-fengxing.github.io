@@ -19,14 +19,6 @@ export default function NotFound() {
       <main className="flex-1 lg:ml-64">
         <div className="max-w-6xl mx-auto px-6 py-20">
           <div className="max-w-4xl mx-auto">
-            <Link
-              href="/"
-              className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-8"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              返回首页
-            </Link>
-
             <div className="text-center flex flex-col items-center justify-center min-h-[60vh]">
               {/* 404 数字显示 */}
               <div className="mb-6">
@@ -63,6 +55,17 @@ export default function NotFound() {
                 <p className="text-base text-muted-foreground max-w-lg mx-auto">
                   看起来您访问的页面不存在，或者已经被移动到了其他地方。
                 </p>
+              </div>
+
+              {/* 返回首页按钮 */}
+              <div className="mt-8">
+                <Link
+                  href="/"
+                  className="inline-flex items-center gap-2 px-6 py-3 bg-accent text-accent-foreground rounded-lg hover:bg-accent/90 transition-colors font-medium"
+                >
+                  <Home className="w-4 h-4" />
+                  返回首页
+                </Link>
               </div>
             </div>
           </div>

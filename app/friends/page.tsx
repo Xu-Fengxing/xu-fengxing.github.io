@@ -21,14 +21,6 @@ export default function FriendsPage() {
       <main className="flex-1 lg:ml-64">
         <div className="max-w-6xl mx-auto px-6 py-20">
           <div className="max-w-4xl mx-auto">
-            <Link
-              href="/"
-              className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-8"
-            >
-              <ArrowLeft className="h-4 w-4" />
-              返回首页
-            </Link>
-
             <div className="text-center mb-12">
               <h1 className="text-3xl md:text-4xl font-bold mb-2">友链</h1>
               <p className="text-muted-foreground text-base">发现更多优秀的博客和网站</p>
