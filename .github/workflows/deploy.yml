@@ -37,6 +37,12 @@ jobs:
       run: npm run build
       env:
         NODE_ENV: production
+        
+    - name: Copy CNAME file
+      run: |
+        if [ -f CNAME.txt ]; then
+          cp CNAME.txt out/CNAME
+        fi
       
     - name: Setup Pages
       uses: actions/configure-pages@v4
