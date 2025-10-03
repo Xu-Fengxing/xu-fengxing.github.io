@@ -23,23 +23,25 @@ export default function BlogPage() {
             <p className="text-muted-foreground text-base">分享设计思考与技术心得</p>
           </div>
 
-          <div className="space-y-6">
-            {posts.map((post, index) => (
-              <Link
-                key={index}
-                href={`/blog/${post.id}`}
-                className="block group rounded-2xl border border-border bg-card p-6 transition-all hover:border-accent hover:shadow-lg hover:shadow-accent/10 hover:-translate-y-1"
-              >
-                <div className="flex items-center gap-3 mb-3">
-                  <span className="inline-flex items-center rounded-full bg-accent/10 px-3 py-1 text-xs font-medium text-accent">
-                    {post.category}
-                  </span>
-                  <time className="text-sm text-muted-foreground">{post.date}</time>
-                </div>
-                <h2 className="text-xl font-semibold mb-2 group-hover:text-accent transition-colors">{post.title}</h2>
-                <p className="text-muted-foreground text-pretty">{post.excerpt}</p>
-              </Link>
-            ))}
+          <div className="max-w-4xl mx-auto">
+            <div className="space-y-6">
+              {posts.map((post, index) => (
+                <Link
+                  key={index}
+                  href={`/blog/${post.id}`}
+                  className="block group rounded-2xl border border-border bg-card p-6 transition-all hover:border-accent hover:shadow-lg hover:shadow-accent/10 hover:-translate-y-1"
+                >
+                  <div className="flex items-center gap-3 mb-3">
+                    <span className="inline-flex items-center rounded-full bg-accent/10 px-3 py-1 text-xs font-medium text-accent">
+                      {post.category}
+                    </span>
+                    <time className="text-sm text-muted-foreground">{post.date}</time>
+                  </div>
+                  <h2 className="text-xl font-semibold mb-2 group-hover:text-accent transition-colors">{post.title}</h2>
+                  <p className="text-muted-foreground text-pretty">{post.excerpt}</p>
+                </Link>
+              ))}
+            </div>
           </div>
         </div>
       </main>
