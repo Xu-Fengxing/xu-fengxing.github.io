@@ -3,8 +3,6 @@ const nextConfig = {
   output: 'export',
   trailingSlash: true,
   skipTrailingSlashRedirect: true,
-  assetPrefix: process.env.NODE_ENV === 'production' ? '/Portfolio' : '',
-  basePath: process.env.NODE_ENV === 'production' ? '/Portfolio' : '',
   eslint: {
     ignoreDuringBuilds: true,
   },
