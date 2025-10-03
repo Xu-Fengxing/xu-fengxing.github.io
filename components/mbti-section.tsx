@@ -42,7 +42,7 @@ export function MBTISection() {
         <h2 className="text-2xl lg:text-3xl font-semibold text-gray-900 dark:text-white tracking-tight text-center lg:text-left" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif' }}>
           我的人格
         </h2>
-        <div className="w-20 h-0.5 bg-gradient-to-r from-accent via-accent/60 to-transparent mt-2 mx-auto lg:mx-0"></div>
+        <div className="w-20 h-0.5 bg-gradient-to-r from-transparent via-accent to-transparent mt-2 mx-auto lg:mx-0 lg:bg-gradient-to-r lg:from-accent lg:via-accent/60 lg:to-transparent"></div>
       </div>
       
       <div className="max-w-5xl w-full h-full flex items-center justify-center">
