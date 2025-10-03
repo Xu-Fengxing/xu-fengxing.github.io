@@ -62,7 +62,9 @@ export function Sidebar() {
           <nav className="flex-1 space-y-1 px-3 py-6">
             {navigation.map((item) => {
               const Icon = item.icon
-              const isActive = pathname === item.href
+              // 判断是否为激活状态：精确匹配或子路径匹配
+              const isActive = pathname === item.href || 
+                (item.href !== "/" && pathname.startsWith(item.href + "/"))
               return (
                 <Link
                   key={item.name}
