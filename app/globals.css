@@ -173,7 +173,8 @@
 
   /* 移动端强制使用网站字体，覆盖系统字体 */
   @media (max-width: 1024px) {
-    * {
+    /* 最高优先级字体覆盖 */
+    *, *::before, *::after {
       -webkit-font-smoothing: antialiased !important;
       -moz-osx-font-smoothing: grayscale !important;
       text-rendering: optimizeLegibility !important;
@@ -181,7 +182,7 @@
       font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif !important;
     }
     
-    /* 强制覆盖所有可能的字体设置 */
+    /* 强制覆盖所有HTML元素 */
     html, body, div, span, applet, object, iframe,
     h1, h2, h3, h4, h5, h6, p, blockquote, pre,
     a, abbr, acronym, address, big, cite, code,
@@ -193,7 +194,7 @@
     canvas, details, embed, figure, figcaption, footer,
     header, hgroup, menu, nav, output, ruby, section,
     summary, time, mark, audio, video, button, input,
-    textarea, select, option {
+    textarea, select, option, main, aside, nav {
       font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif !important;
     }
     
@@ -215,6 +216,16 @@
     /* 强制覆盖可能的CSS变量字体 */
     :root {
       --font-sans: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif !important;
+    }
+    
+    /* 覆盖可能的系统字体名称 */
+    [style*="font-family"] {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif !important;
+    }
+    
+    /* 特别针对可能的幼圆字体覆盖 */
+    [style*="幼圆"], [style*="YouYuan"], [style*="SimSun"], [style*="宋体"], [style*="黑体"], [style*="微软雅黑"] {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif !important;
     }
   }
 }

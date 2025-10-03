@@ -27,6 +27,18 @@ export default function RootLayout({
           crossOrigin="anonymous"
           referrerPolicy="no-referrer"
         />
+        <style dangerouslySetInnerHTML={{
+          __html: `
+            @media (max-width: 1024px) {
+              * {
+                font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif !important;
+              }
+              html, body, div, span, h1, h2, h3, h4, h5, h6, p, a, button, input, textarea, select, option, li, ul, ol, article, section, main, aside, nav, header, footer {
+                font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif !important;
+              }
+            }
+          `
+        }} />
       </head>
       <body className={`${GeistSans.variable} ${GeistMono.variable} antialiased`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
