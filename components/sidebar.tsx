@@ -13,6 +13,7 @@ export function Sidebar() {
   const navigation = [
     { name: "首页", href: "/", icon: Home },
     { name: "博客", href: "/blog", icon: BookOpen },
+    { name: "友链", href: "/friends", icon: ExternalLink },
   ]
 
   const friendLinks = [
