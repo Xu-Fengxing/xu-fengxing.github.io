@@ -7,70 +7,92 @@ import { useEffect, useState } from "react"
 
 export default function Home() {
   const [scrollY, setScrollY] = useState(0)
-  const [scrollPhase, setScrollPhase] = useState<"initial" | "locked" | "unlocked">("initial")
-  const [isLargeScreen, setIsLargeScreen] = useState(false)
+  const [showMBTI, setShowMBTI] = useState(false)
+
+  const handleToggleMBTI = () => {
+    setShowMBTI(!showMBTI)
+  }
 
   useEffect(() => {
-    const handleResize = () => {
-      setIsLargeScreen(window.innerWidth >= 1024)
-    }
-    
     const handleScroll = () => {
       const currentScroll = window.scrollY
       setScrollY(currentScroll)
-
-      if (currentScroll <= 50) {
-        setScrollPhase("initial")
-      } else if (currentScroll > 50 && currentScroll <= 600) {
-        setScrollPhase("locked")
-      } else {
-        setScrollPhase("unlocked")
+      
+      // 当滚动超过30px时显示MBTI模块，增加一些缓冲
+      if (currentScroll > 30 && !showMBTI) {
+        setShowMBTI(true)
+      } else if (currentScroll <= 10 && showMBTI) {
+        setShowMBTI(false)
       }
     }
 
-    handleResize()
-    window.addEventListener("resize", handleResize)
-    window.addEventListener("scroll", handleScroll, { passive: true })
-    return () => {
-      window.removeEventListener("resize", handleResize)
-      window.removeEventListener("scroll", handleScroll)
+    // 添加wheel事件监听器来处理鼠标滚轮
+    const handleWheel = (e: WheelEvent) => {
+      if (!showMBTI && e.deltaY > 0) {
+        // 向下滚动时显示MBTI
+        setShowMBTI(true)
+        e.preventDefault()
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      } else if (showMBTI && e.deltaY < 0) {
+        // 向上滚动时隐藏MBTI
+        setShowMBTI(false)
+        e.preventDefault()
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      }
     }
-  }, [])
 
-  const viewportHeight = typeof window !== "undefined" ? window.innerHeight : 800
+    // 添加键盘事件监听器
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowDown' && !showMBTI) {
+        setShowMBTI(true)
+        e.preventDefault()
+      } else if (e.key === 'ArrowUp' && showMBTI) {
+        setShowMBTI(false)
+        e.preventDefault()
+      }
+    }
 
-  const heroOpacity =
-    scrollPhase === "initial" ? 1 : scrollPhase === "locked" ? Math.max(0, 1 - (scrollY - 50) / 550) : 0
-
+    window.addEventListener("scroll", handleScroll, { passive: true })
+    window.addEventListener("wheel", handleWheel, { passive: false })
+    window.addEventListener("keydown", handleKeyDown)
+    
+    return () => {
+      window.removeEventListener("scroll", handleScroll)
+      window.removeEventListener("wheel", handleWheel)
+      window.removeEventListener("keydown", handleKeyDown)
+    }
+  }, [showMBTI])
 
   return (
     <div className="flex min-h-screen">
       <Sidebar />
       <main className="flex-1 lg:ml-64 relative">
-        <div
-          className="fixed inset-0 lg:left-64 transition-opacity duration-300 ease-out z-0 pointer-events-none"
-          style={{ opacity: heroOpacity }}
+        {/* Hero组件 - 满屏板块 */}
+        <div 
+          className="fixed inset-0 lg:left-64 transition-all duration-700 ease-in-out"
+          style={{ 
+            opacity: showMBTI ? 0 : 1,
+            transform: showMBTI ? 'translateY(-20px) scale(0.98)' : 'translateY(0) scale(1)',
+            zIndex: showMBTI ? 1 : 2,
+            filter: showMBTI ? 'blur(2px)' : 'blur(0px)'
+          }}
         >
-          <Hero />
+          <Hero onToggleMBTI={handleToggleMBTI} />
         </div>
 
-        <div
-          className="relative z-10 bg-background transition-all duration-700 ease-in-out"
-          style={{
-            transform: scrollPhase === "initial" ? `translateY(${viewportHeight}px)` : 
-                      scrollPhase === "locked" ? "translateY(0)" : "translateY(0)",
-            position: scrollPhase === "unlocked" ? "relative" : "fixed",
-            top: scrollPhase === "unlocked" ? "auto" : 0,
-            left: scrollPhase === "unlocked" ? "auto" : (isLargeScreen ? "256px" : "0"),
-            right: scrollPhase === "unlocked" ? "auto" : 0,
-            width: scrollPhase === "unlocked" ? "auto" : (isLargeScreen ? "calc(100% - 256px)" : "100%"),
-            minHeight: "100vh",
+        {/* MBTI模块 - 满屏板块 */}
+        <div 
+          className="fixed inset-0 lg:left-64 transition-all duration-700 ease-in-out"
+          style={{ 
+            opacity: showMBTI ? 1 : 0,
+            transform: showMBTI ? 'translateY(0) scale(1)' : 'translateY(20px) scale(0.98)',
+            zIndex: showMBTI ? 2 : 1,
+            pointerEvents: showMBTI ? 'auto' : 'none',
+            filter: showMBTI ? 'blur(0px)' : 'blur(2px)'
           }}
         >
           <MBTISection />
         </div>
-
-        <div style={{ height: `${viewportHeight + 500}px` }} />
       </main>
     </div>
   )

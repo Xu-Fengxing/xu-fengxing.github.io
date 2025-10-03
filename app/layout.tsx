@@ -2,16 +2,14 @@ import type React from "react"
 import type { Metadata } from "next"
 import { GeistSans } from "geist/font/sans"
 import { GeistMono } from "geist/font/mono"
-import { Analytics } from "@vercel/analytics/next"
 import "./globals.css"
 import { ThemeProvider } from "next-themes"
-import Sidebar from "@/components/sidebar"
 import { Suspense } from "react"
 
 export const metadata: Metadata = {
-  title: "v0 App",
-  description: "Created with v0",
-  generator: "v0.app",
+  title: "风行Justin - 个人作品集",
+  description: "设计师与开发者的个人作品集，展示设计作品和技术项目",
+  generator: "Next.js",
 }
 
 export default function RootLayout({
@@ -33,11 +31,9 @@ export default function RootLayout({
       <body className={`${GeistSans.variable} ${GeistMono.variable} antialiased`}>
         <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
           <Suspense fallback={<div>Loading...</div>}>
-            <Sidebar />
-            <main className="min-h-screen">{children}</main>
+            {children}
           </Suspense>
         </ThemeProvider>
-        <Analytics />
       </body>
     </html>
   )

@@ -1,6 +1,10 @@
 "use client"
 
-export function Hero() {
+interface HeroProps {
+  onToggleMBTI?: () => void
+}
+
+export function Hero({ onToggleMBTI }: HeroProps) {
   const contacts = [
     {
       name: "Bilibili",
@@ -77,8 +81,11 @@ export function Hero() {
         </div>
       </div>
 
-      <div className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce pointer-events-auto">
-        <div className="flex flex-col items-center gap-2 text-muted-foreground">
+      <div 
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce pointer-events-auto cursor-pointer hover:scale-110 transition-transform"
+        onClick={onToggleMBTI}
+      >
+        <div className="flex flex-col items-center gap-2 text-muted-foreground hover:text-accent transition-colors">
           <i className="fa-solid fa-chevron-down text-2xl"></i>
         </div>
       </div>

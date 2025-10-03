@@ -38,7 +38,7 @@ export function Sidebar() {
           <div className="flex h-20 items-center px-6 border-b border-sidebar-border">
             <Link href="/" className="flex items-center gap-3 group">
               <div className="h-10 w-10 rounded-full overflow-hidden flex-shrink-0 transition-transform group-hover:scale-105">
-                <Image
+                <img
                   src="/avatar.jpg"
                   alt="风行Justin"
                   width={40}
