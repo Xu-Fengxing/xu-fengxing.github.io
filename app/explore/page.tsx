@@ -270,22 +270,9 @@ export default function ExplorePage() {
 
             {/* 分类导航 */}
             <div className="mb-8">
-              <div className="relative">
-                {/* 左箭头 - GitHub风格 */}
-                {canScrollLeft && (
-                  <button
-                    onClick={scrollLeft}
-                    className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 items-center justify-center bg-background border border-border rounded-md hover:bg-accent hover:text-accent-foreground transition-colors shadow-sm"
-                  >
-                    <ChevronLeft className="w-4 h-4" />
-                  </button>
-                )}
-                
+              <div className="flex justify-center">
                 {/* 分类按钮容器 */}
-                <div 
-                  ref={scrollContainerRef}
-                  className="flex gap-2 overflow-x-auto pb-4 scrollbar-hide md:px-10"
-                >
+                <div className="flex gap-2 overflow-x-auto pb-4 scrollbar-hide">
                   {categories.map((category) => (
                     <button
                       key={category.id}
@@ -301,16 +288,6 @@ export default function ExplorePage() {
                     </button>
                   ))}
                 </div>
-                
-                {/* 右箭头 - GitHub风格 */}
-                {canScrollRight && (
-                  <button
-                    onClick={scrollRight}
-                    className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 items-center justify-center bg-background border border-border rounded-md hover:bg-accent hover:text-accent-foreground transition-colors shadow-sm"
-                  >
-                    <ChevronRight className="w-4 h-4" />
-                  </button>
-                )}
               </div>
             </div>
 
