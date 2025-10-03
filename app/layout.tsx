@@ -10,6 +10,12 @@ export const metadata: Metadata = {
   title: "风行Justin - 个人空间",
   description: "设计师与开发者的个人空间，展示设计作品和技术项目",
   generator: "Next.js",
+  viewport: {
+    width: "device-width",
+    initialScale: 1,
+    maximumScale: 1,
+    userScalable: false,
+  },
 }
 
 export default function RootLayout({

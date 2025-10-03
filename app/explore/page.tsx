@@ -3,11 +3,21 @@
 import { Sidebar } from "@/components/sidebar"
 import { ArrowLeft, ExternalLink, ChevronLeft, ChevronRight } from "lucide-react"
 import Link from "next/link"
-import { useState, useRef } from "react"
+import { useState, useRef, useEffect } from "react"
 
 export default function ExplorePage() {
   const [activeCategory, setActiveCategory] = useState("all")
+  const [canScrollLeft, setCanScrollLeft] = useState(false)
+  const [canScrollRight, setCanScrollRight] = useState(true)
   const scrollContainerRef = useRef<HTMLDivElement>(null)
+
+  const checkScrollButtons = () => {
+    if (scrollContainerRef.current) {
+      const { scrollLeft, scrollWidth, clientWidth } = scrollContainerRef.current
+      setCanScrollLeft(scrollLeft > 0)
+      setCanScrollRight(scrollLeft < scrollWidth - clientWidth - 1)
+    }
+  }
 
   const scrollLeft = () => {
     if (scrollContainerRef.current) {
@@ -20,6 +30,20 @@ export default function ExplorePage() {
       scrollContainerRef.current.scrollBy({ left: 200, behavior: 'smooth' })
     }
   }
+
+  useEffect(() => {
+    const container = scrollContainerRef.current
+    if (container) {
+      checkScrollButtons()
+      container.addEventListener('scroll', checkScrollButtons)
+      window.addEventListener('resize', checkScrollButtons)
+      
+      return () => {
+        container.removeEventListener('scroll', checkScrollButtons)
+        window.removeEventListener('resize', checkScrollButtons)
+      }
+    }
+  }, [])
 
   const categories = [
     { id: "all", name: "全部", icon: "🌐" },
@@ -233,7 +257,7 @@ export default function ExplorePage() {
           <div className="max-w-xs sm:max-w-sm md:max-w-4xl mx-auto">
             <Link
               href="/"
-              className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-6 md:mb-8"
+              className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-8"
             >
               <ArrowLeft className="h-4 w-4" />
               返回首页
@@ -246,26 +270,21 @@ export default function ExplorePage() {
 
             {/* 分类导航 */}
             <div className="mb-8">
-              <div className="relative">
-                {/* 左箭头 - 只在桌面端显示 */}
-                <button
-                  onClick={scrollLeft}
-                  className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 items-center justify-center bg-background/80 backdrop-blur-sm border border-border rounded-full hover:bg-accent hover:text-accent-foreground transition-colors shadow-lg"
-                >
-                  <ChevronLeft className="w-4 h-4" />
-                </button>
+              <div className="flex items-center justify-center gap-4">
+                {/* 左箭头 - 只在桌面端显示且可滚动时显示 */}
+                {canScrollLeft && (
+                  <button
+                    onClick={scrollLeft}
+                    className="hidden md:flex w-8 h-8 items-center justify-center bg-background/80 backdrop-blur-sm border border-border rounded-full hover:bg-accent hover:text-accent-foreground transition-colors shadow-lg"
+                  >
+                    <ChevronLeft className="w-4 h-4" />
+                  </button>
+                )}
                 
-                {/* 右箭头 - 只在桌面端显示 */}
-                <button
-                  onClick={scrollRight}
-                  className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 items-center justify-center bg-background/80 backdrop-blur-sm border border-border rounded-full hover:bg-accent hover:text-accent-foreground transition-colors shadow-lg"
-                >
-                  <ChevronRight className="w-4 h-4" />
-                </button>
-                
+                {/* 分类按钮容器 */}
                 <div 
                   ref={scrollContainerRef}
-                  className="flex gap-3 overflow-x-auto pb-4 scrollbar-hide md:px-10"
+                  className="flex gap-3 overflow-x-auto pb-4 scrollbar-hide justify-center"
                 >
                   {categories.map((category) => (
                     <button
@@ -282,6 +301,16 @@ export default function ExplorePage() {
                     </button>
                   ))}
                 </div>
+                
+                {/* 右箭头 - 只在桌面端显示且可滚动时显示 */}
+                {canScrollRight && (
+                  <button
+                    onClick={scrollRight}
+                    className="hidden md:flex w-8 h-8 items-center justify-center bg-background/80 backdrop-blur-sm border border-border rounded-full hover:bg-accent hover:text-accent-foreground transition-colors shadow-lg"
+                  >
+                    <ChevronRight className="w-4 h-4" />
+                  </button>
+                )}
               </div>
             </div>
 
