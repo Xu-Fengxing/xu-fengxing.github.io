@@ -83,7 +83,7 @@ export function Sidebar() {
           </nav>
 
           {/* Friend Links */}
-          <div className="border-t border-sidebar-border px-6 py-3">
+          <div className="border-t border-sidebar-border px-6 py-3 pt-6">
             <div className="flex items-center justify-between mb-2">
               <h3 className="text-sm font-semibold text-sidebar-foreground">友链</h3>
               <Link
