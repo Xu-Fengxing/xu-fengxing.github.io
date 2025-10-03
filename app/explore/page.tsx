@@ -270,12 +270,12 @@ export default function ExplorePage() {
 
             {/* 分类导航 */}
             <div className="mb-8">
-              <div className="flex items-center justify-center gap-4">
-                {/* 左箭头 - 只在桌面端显示且可滚动时显示 */}
+              <div className="relative">
+                {/* 左箭头 - GitHub风格 */}
                 {canScrollLeft && (
                   <button
                     onClick={scrollLeft}
-                    className="hidden md:flex w-8 h-8 items-center justify-center bg-background/80 backdrop-blur-sm border border-border rounded-full hover:bg-accent hover:text-accent-foreground transition-colors shadow-lg"
+                    className="hidden md:flex absolute left-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 items-center justify-center bg-background border border-border rounded-md hover:bg-accent hover:text-accent-foreground transition-colors shadow-sm"
                   >
                     <ChevronLeft className="w-4 h-4" />
                   </button>
@@ -284,29 +284,29 @@ export default function ExplorePage() {
                 {/* 分类按钮容器 */}
                 <div 
                   ref={scrollContainerRef}
-                  className="flex gap-3 overflow-x-auto pb-4 scrollbar-hide justify-center"
+                  className="flex gap-2 overflow-x-auto pb-4 scrollbar-hide md:px-10"
                 >
                   {categories.map((category) => (
                     <button
                       key={category.id}
                       onClick={() => setActiveCategory(category.id)}
-                      className={`flex items-center gap-2 px-3 md:px-4 py-2 rounded-full whitespace-nowrap transition-all text-sm md:text-base ${
+                      className={`flex items-center gap-2 px-3 py-1.5 rounded-md whitespace-nowrap transition-all text-sm border ${
                         activeCategory === category.id
-                          ? "bg-accent text-accent-foreground shadow-md"
-                          : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+                          ? "bg-accent text-accent-foreground border-accent"
+                          : "bg-background text-foreground border-border hover:bg-secondary hover:border-border"
                       }`}
                     >
-                      <span className="text-base md:text-lg">{category.icon}</span>
+                      <span className="text-sm">{category.icon}</span>
                       <span className="font-medium">{category.name}</span>
                     </button>
                   ))}
                 </div>
                 
-                {/* 右箭头 - 只在桌面端显示且可滚动时显示 */}
+                {/* 右箭头 - GitHub风格 */}
                 {canScrollRight && (
                   <button
                     onClick={scrollRight}
-                    className="hidden md:flex w-8 h-8 items-center justify-center bg-background/80 backdrop-blur-sm border border-border rounded-full hover:bg-accent hover:text-accent-foreground transition-colors shadow-lg"
+                    className="hidden md:flex absolute right-0 top-1/2 -translate-y-1/2 z-10 w-8 h-8 items-center justify-center bg-background border border-border rounded-md hover:bg-accent hover:text-accent-foreground transition-colors shadow-sm"
                   >
                     <ChevronRight className="w-4 h-4" />
                   </button>
