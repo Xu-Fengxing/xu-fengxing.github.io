@@ -56,7 +56,7 @@ export default function FriendsPage() {
                       {friend.description}
                     </p>
                     
-                    <div className="flex flex-wrap justify-center gap-2 mb-4">
+                    <div className="hidden md:flex flex-wrap justify-center gap-2 mb-4">
                       {friend.tags.map((tag, tagIndex) => (
                         <span
                           key={tagIndex}
@@ -71,10 +71,10 @@ export default function FriendsPage() {
                       href={friend.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-accent to-accent/90 text-accent-foreground rounded-lg hover:from-accent/90 hover:to-accent/80 transition-all duration-300 font-medium text-sm shadow-sm hover:shadow-md hover:scale-105"
+                      className="inline-flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-accent to-accent/90 text-accent-foreground rounded-lg hover:from-accent/90 hover:to-accent/80 transition-all duration-300 font-medium text-xs md:text-sm shadow-sm hover:shadow-md hover:scale-105 whitespace-nowrap"
                     >
                       访问网站
-                      <ExternalLink className="h-4 w-4" />
+                      <ExternalLink className="h-3 w-3 md:h-4 md:w-4" />
                     </a>
                   </div>
                 </article>
