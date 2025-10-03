@@ -21,12 +21,12 @@ export default function NotFound() {
           <div className="text-center flex flex-col items-center justify-center min-h-[60vh]">
             {/* 404 数字显示 */}
             <div className="mb-6">
-              <h1 className="text-6xl md:text-7xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-accent via-accent/80 to-accent/50">
+              <h1 className="text-6xl md:text-7xl font-bold text-accent">
                 404
               </h1>
             </div>
 
-            {/* GIF元素 - 无圆形底 */}
+            {/* GIF元素 - 回到原来的位置 */}
             <div className="mb-6">
               <img 
                 src="/404.gif" 
