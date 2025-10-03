@@ -42,12 +42,12 @@ export function MBTISection() {
         <h2 className="text-2xl lg:text-3xl font-semibold text-gray-900 dark:text-white tracking-tight text-center lg:text-left" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif' }}>
           我的人格
         </h2>
-        <div className="w-20 h-0.5 bg-gradient-to-r from-transparent via-accent to-transparent mt-2 mx-auto lg:mx-0 lg:bg-gradient-to-r lg:from-accent lg:via-accent/60 lg:to-transparent"></div>
+        <div className="hidden lg:block w-20 h-0.5 bg-gradient-to-r from-accent via-accent/60 to-transparent mt-2"></div>
       </div>
       
       <div className="max-w-5xl w-full h-full flex items-center justify-center">
         {/* 主要内容区域 */}
-        <div className="relative bg-gradient-to-br from-background to-secondary/20 rounded-3xl p-4 md:p-8 border border-border/50 overflow-hidden shadow-lg w-full max-h-[75vh] md:max-h-[85vh] flex flex-col animate-in fade-in-0 slide-in-from-bottom-4 duration-700" style={{ fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif' }}>
+        <div className="relative bg-gradient-to-br from-background to-secondary/20 rounded-3xl p-4 md:p-8 border border-border/50 overflow-hidden shadow-lg w-full max-h-[80vh] md:max-h-[85vh] flex flex-col animate-in fade-in-0 slide-in-from-bottom-4 duration-700" style={{ fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif' }}>
           
           {/* 背景装饰 */}
           <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-accent/10 to-transparent rounded-full -translate-y-32 translate-x-32"></div>
