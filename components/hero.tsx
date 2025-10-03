@@ -29,7 +29,7 @@ export function Hero({ onToggleMBTI }: HeroProps) {
     {
       name: "QQ",
       icon: "fa-brands fa-qq",
-      href: "http://wpa.qq.com/msgrd?v=3&uin=759949209&site=qq&menu=yes",
+      href: "https://qm.qq.com/q/AmEgkq1cju",
     },
   ]
 
