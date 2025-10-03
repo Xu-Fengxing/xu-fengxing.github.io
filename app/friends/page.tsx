@@ -35,48 +35,48 @@ export default function FriendsPage() {
 
           <div className="grid gap-6 grid-cols-2 lg:grid-cols-3 max-w-5xl mx-auto w-full">
             {friends.map((friend, index) => (
-                <article
-                  key={index}
-                  className="group rounded-xl border border-border bg-card p-5 transition-all hover:border-accent hover:shadow-lg hover:shadow-accent/10 hover:-translate-y-1"
-                >
-                  <div className="text-center">
-                    {/* 首字母圆形标识 */}
-                    <div className="w-14 h-14 rounded-full bg-gradient-to-br from-accent/30 via-accent/20 to-accent/10 flex items-center justify-center mx-auto mb-4 shadow-sm">
-                      <span className="text-xl font-bold text-accent">
-                        {friend.name.charAt(0)}
-                      </span>
-                    </div>
-                    
-                    <h2 className="text-xl font-bold mb-3 group-hover:text-accent transition-colors line-clamp-2">
-                      {friend.name}
-                    </h2>
-                    
-                    <p className="text-muted-foreground mb-4 text-pretty leading-relaxed text-sm">
-                      {friend.description}
-                    </p>
-                    
-                    <div className="hidden md:flex flex-wrap justify-center gap-2 mb-4">
-                      {friend.tags.map((tag, tagIndex) => (
-                        <span
-                          key={tagIndex}
-                          className="inline-flex items-center rounded-full bg-gradient-to-r from-secondary to-secondary/80 px-3 py-1 text-xs font-medium text-secondary-foreground shadow-sm"
-                        >
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                    
-                    <a
-                      href={friend.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="inline-flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-accent to-accent/90 text-accent-foreground rounded-lg hover:from-accent/90 hover:to-accent/80 transition-all duration-300 font-medium text-xs md:text-sm shadow-sm hover:shadow-md hover:scale-105 whitespace-nowrap"
-                    >
-                      访问网站
-                      <ExternalLink className="h-3 w-3 md:h-4 md:w-4" />
-                    </a>
+              <article
+                key={index}
+                className="group rounded-xl border border-border bg-card p-5 transition-all hover:border-accent hover:shadow-lg hover:shadow-accent/10 hover:-translate-y-1"
+              >
+                <div className="text-center">
+                  {/* 首字母圆形标识 */}
+                  <div className="w-14 h-14 rounded-full bg-gradient-to-br from-accent/30 via-accent/20 to-accent/10 flex items-center justify-center mx-auto mb-4 shadow-sm">
+                    <span className="text-xl font-bold text-accent">
+                      {friend.name.charAt(0)}
+                    </span>
                   </div>
-                </article>
+                  
+                  <h2 className="text-xl font-bold mb-3 group-hover:text-accent transition-colors line-clamp-2">
+                    {friend.name}
+                  </h2>
+                  
+                  <p className="text-muted-foreground mb-4 text-pretty leading-relaxed text-sm">
+                    {friend.description}
+                  </p>
+                  
+                  <div className="hidden md:flex flex-wrap justify-center gap-2 mb-4">
+                    {friend.tags.map((tag, tagIndex) => (
+                      <span
+                        key={tagIndex}
+                        className="inline-flex items-center rounded-full bg-gradient-to-r from-secondary to-secondary/80 px-3 py-1 text-xs font-medium text-secondary-foreground shadow-sm"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                  
+                  <a
+                    href={friend.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-accent to-accent/90 text-accent-foreground rounded-lg hover:from-accent/90 hover:to-accent/80 transition-all duration-300 font-medium text-xs md:text-sm shadow-sm hover:shadow-md hover:scale-105 whitespace-nowrap"
+                  >
+                    访问网站
+                    <ExternalLink className="h-3 w-3 md:h-4 md:w-4" />
+                  </a>
+                </div>
+              </article>
             ))}
             
             {/* 占位符 - 确保每行都有3个元素 */}
@@ -118,7 +118,6 @@ export default function FriendsPage() {
                 GitHub
               </a>
             </div>
-          </div>
           </div>
         </div>
       </main>
