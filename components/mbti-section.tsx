@@ -102,7 +102,7 @@ export function MBTISection() {
                         ISTP-T
                       </p>
                       <div className="max-w-sm mx-auto">
-                        <h2 className="text-lg font-bold text-gray-900 dark:text-white mb-3">
+                        <h2 className="text-base md:text-lg font-bold text-gray-900 dark:text-white mb-3">
                           我喜欢用双手创造，用头脑思考。
                         </h2>
                         <p className="text-gray-600 dark:text-gray-300 leading-relaxed text-sm">

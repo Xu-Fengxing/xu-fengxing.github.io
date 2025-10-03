@@ -63,7 +63,7 @@ export function Hero({ onToggleMBTI }: HeroProps) {
           一个兴趣使然的设计爱好者
         </p>
 
-        <div className="flex items-center justify-center gap-4 mt-12 animate-fade-in-up animation-delay-400">
+        <div className="flex items-center justify-center gap-3 md:gap-4 mt-12 animate-fade-in-up animation-delay-400 max-w-sm md:max-w-none mx-auto px-4">
           {contacts.map((contact) => {
             return (
               <a
@@ -71,10 +71,10 @@ export function Hero({ onToggleMBTI }: HeroProps) {
                 href={contact.href}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex h-14 w-14 items-center justify-center rounded-xl bg-secondary transition-all hover:bg-accent hover:text-accent-foreground hover:shadow-lg hover:shadow-accent/20 hover:scale-110"
+                className="group flex h-12 w-12 md:h-14 md:w-14 items-center justify-center rounded-xl bg-secondary transition-all hover:bg-accent hover:text-accent-foreground hover:shadow-lg hover:shadow-accent/20 hover:scale-110"
                 title={contact.name}
               >
-                <i className={`${contact.icon} text-xl`}></i>
+                <i className={`${contact.icon} text-lg md:text-xl`}></i>
               </a>
             )
           })}
