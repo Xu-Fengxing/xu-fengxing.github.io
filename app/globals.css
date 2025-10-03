@@ -173,8 +173,10 @@
 
   /* 移动端强制使用网站字体，覆盖系统字体 */
   @media (max-width: 1024px) {
-    /* 最高优先级字体覆盖 */
-    *, *::before, *::after {
+    /* 最高优先级字体覆盖 - 排除Font Awesome图标 */
+    *:not(.fa):not(.fas):not(.far):not(.fab):not([class*="fa-"]):not(i[class*="fa-"]), 
+    *:not(.fa):not(.fas):not(.far):not(.fab):not([class*="fa-"]):not(i[class*="fa-"])::before, 
+    *:not(.fa):not(.fas):not(.far):not(.fab):not([class*="fa-"]):not(i[class*="fa-"])::after {
       -webkit-font-smoothing: antialiased !important;
       -moz-osx-font-smoothing: grayscale !important;
       text-rendering: optimizeLegibility !important;
@@ -182,19 +184,24 @@
       font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif !important;
     }
     
-    /* 强制覆盖所有HTML元素 */
+    /* 强制覆盖所有HTML元素 - 排除Font Awesome图标 */
     html, body, div, span, applet, object, iframe,
     h1, h2, h3, h4, h5, h6, p, blockquote, pre,
     a, abbr, acronym, address, big, cite, code,
     del, dfn, em, img, ins, kbd, q, s, samp,
     small, strike, strong, sub, sup, tt, var,
-    b, u, i, center, dl, dt, dd, ol, ul, li,
+    b, u, center, dl, dt, dd, ol, ul, li,
     fieldset, form, label, legend, table, caption,
     tbody, tfoot, thead, tr, th, td, article, aside,
     canvas, details, embed, figure, figcaption, footer,
     header, hgroup, menu, nav, output, ruby, section,
     summary, time, mark, audio, video, button, input,
     textarea, select, option, main, aside, nav {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif !important;
+    }
+    
+    /* 特别处理i标签，排除Font Awesome */
+    i:not([class*="fa-"]):not(.fa):not(.fas):not(.far):not(.fab) {
       font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif !important;
     }
     
