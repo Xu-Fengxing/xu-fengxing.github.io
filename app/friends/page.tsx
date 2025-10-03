@@ -48,7 +48,7 @@ export default function FriendsPage() {
                       </span>
                     </div>
                     
-                    <h2 className="text-xl font-bold mb-3 group-hover:text-accent transition-colors">
+                    <h2 className="text-xl font-bold mb-3 group-hover:text-accent transition-colors line-clamp-2">
                       {friend.name}
                     </h2>
                     
@@ -96,7 +96,7 @@ export default function FriendsPage() {
             </div>
 
             {/* 申请友链说明 - 紧凑布局 */}
-            <div className="max-w-2xl mx-auto p-5 rounded-xl border border-border bg-card mt-8">
+            <div className="max-w-2xl mx-auto p-5 rounded-xl border border-border bg-card mt-8 mb-8">
               <h3 className="text-lg font-semibold mb-3 text-center">申请友链</h3>
               <p className="text-muted-foreground mb-4 text-center text-sm">
                 如果你也想与我交换友链，欢迎通过以下方式联系我：
