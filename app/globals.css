@@ -19,22 +19,22 @@
   --secondary-foreground: 0 0% 15%;
   --muted: 0 0% 96%;
   --muted-foreground: 0 0% 50%;
-  --accent: 250 100% 55%;
+  --accent: 220 100% 55%;
   --accent-foreground: 0 0% 98%;
   --destructive: 27 100% 58%;
   --destructive-foreground: 0 0% 98%;
   --border: 0 0% 90%;
   --input: 0 0% 90%;
-  --ring: 250 100% 55%;
+  --ring: 220 100% 55%;
   --radius: 0.75rem;
   --sidebar: 0 0% 99%;
   --sidebar-foreground: 0 0% 15%;
-  --sidebar-primary: 250 100% 55%;
+  --sidebar-primary: 220 100% 55%;
   --sidebar-primary-foreground: 0 0% 98%;
   --sidebar-accent: 0 0% 96%;
   --sidebar-accent-foreground: 0 0% 15%;
   --sidebar-border: 0 0% 92%;
-  --sidebar-ring: 250 100% 55%;
+  --sidebar-ring: 220 100% 55%;
 }
 
 .dark {
@@ -51,21 +51,21 @@
   --secondary-foreground: 0 0% 95%;
   --muted: 0 0% 22%;
   --muted-foreground: 0 0% 60%;
-  --accent: 250 100% 60%;
+  --accent: 220 100% 60%;
   --accent-foreground: 0 0% 98%;
   --destructive: 27 100% 50%;
   --destructive-foreground: 0 0% 95%;
   --border: 0 0% 25%;
   --input: 0 0% 25%;
-  --ring: 250 100% 60%;
+  --ring: 220 100% 60%;
   --sidebar: 0 0% 14%;
   --sidebar-foreground: 0 0% 95%;
-  --sidebar-primary: 250 100% 60%;
+  --sidebar-primary: 220 100% 60%;
   --sidebar-primary-foreground: 0 0% 98%;
   --sidebar-accent: 0 0% 20%;
   --sidebar-accent-foreground: 0 0% 95%;
   --sidebar-border: 0 0% 22%;
-  --sidebar-ring: 250 100% 60%;
+  --sidebar-ring: 220 100% 60%;
 }
 
 @theme inline {
@@ -161,10 +161,10 @@
       font-display: swap !important;
     }
     
-    body {
+    body, p, span, div, li, ul, ol, article, section, main, aside, nav, header, footer {
       font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif !important;
       font-weight: 400 !important;
-      line-height: 1.5 !important;
+      line-height: 1.6 !important;
     }
     
     h1, h2, h3, h4, h5, h6 {
@@ -172,7 +172,17 @@
       font-weight: 600 !important;
     }
     
-    button, input, textarea, select {
+    button, input, textarea, select, a {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif !important;
+    }
+    
+    /* 确保博客文章中的文本使用统一字体 */
+    .prose, .prose * {
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif !important;
+    }
+    
+    /* 强制所有文本元素使用网站字体 */
+    [class*="text-"], [class*="font-"] {
       font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif !important;
     }
   }

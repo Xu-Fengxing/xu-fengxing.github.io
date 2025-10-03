@@ -107,8 +107,8 @@ export default function BlogPostPage({ params }: { params: { id: string } }) {
                 } else if (line.startsWith('- ')) {
                   return (
                     <div key={index} className="mb-2 ml-4 flex items-baseline">
-                      <span className="text-gray-500 dark:text-gray-400 mr-2 text-sm">•</span>
-                      <span className="text-black dark:text-white text-sm">{line.slice(2)}</span>
+                      <span className="text-gray-500 dark:text-gray-400 mr-2">•</span>
+                      <span className="text-black dark:text-white">{line.slice(2)}</span>
                     </div>
                   )
                 } else if (line.startsWith('1. ')) {
