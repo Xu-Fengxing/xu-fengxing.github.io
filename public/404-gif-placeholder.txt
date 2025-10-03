@@ -1,0 +1,2 @@
+请将您的404 GIF文件重命名为 "404-gif.gif" 并放置在此目录中
+Place your 404 GIF file here and rename it to "404-gif.gif"

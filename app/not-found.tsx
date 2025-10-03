@@ -1,3 +1,5 @@
+"use client"
+
 import { Sidebar } from "@/components/sidebar"
 import { ArrowLeft, Home } from "lucide-react"
 import Link from "next/link"
@@ -37,7 +39,7 @@ export default function NotFound() {
               </p>
             </div>
 
-            {/* 装饰性元素 */}
+            {/* GIF装饰元素 */}
             <div className="relative mb-12">
               <div className="w-64 h-64 mx-auto relative">
                 {/* 背景装饰圆 */}
@@ -45,10 +47,23 @@ export default function NotFound() {
                 <div className="absolute inset-4 rounded-full bg-gradient-to-tr from-accent/5 to-transparent animate-pulse" style={{ animationDelay: '1s' }}></div>
                 <div className="absolute inset-8 rounded-full bg-gradient-to-bl from-accent/3 to-transparent animate-pulse" style={{ animationDelay: '2s' }}></div>
                 
-                {/* 中心图标 */}
+                {/* GIF元素 */}
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-16 h-16 rounded-full bg-accent/20 flex items-center justify-center backdrop-blur-sm">
-                    <Home className="w-8 h-8 text-accent" />
+                  <div className="w-48 h-48 rounded-full overflow-hidden bg-gradient-to-br from-accent/20 to-accent/10 backdrop-blur-sm flex items-center justify-center">
+                    <img 
+                      src="/404-gif.gif" 
+                      alt="404动画" 
+                      className="w-full h-full object-cover rounded-full"
+                      onError={(e) => {
+                        // 如果GIF加载失败，显示备用图标
+                        e.currentTarget.style.display = 'none';
+                        const fallbackElement = e.currentTarget.nextElementSibling as HTMLElement;
+                        if (fallbackElement) fallbackElement.style.display = 'flex';
+                      }}
+                    />
+                    <div className="w-16 h-16 rounded-full bg-accent/20 flex items-center justify-center backdrop-blur-sm hidden">
+                      <Home className="w-8 h-8 text-accent" />
+                    </div>
                   </div>
                 </div>
               </div>
