@@ -233,7 +233,7 @@ export default function ExplorePage() {
 
             {/* 分类导航 */}
             <div className="mb-8">
-              <div className="flex gap-3 overflow-x-auto pb-4">
+              <div className="flex gap-3 overflow-x-auto pb-4 scrollbar-hide">
                 {categories.map((category) => (
                   <button
                     key={category.id}

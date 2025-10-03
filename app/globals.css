@@ -170,6 +170,15 @@
   .fixed {
     transform-origin: top left;
   }
+  
+  /* 隐藏滚动条 */
+  .scrollbar-hide {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;  /* Chrome, Safari and Opera */
+  }
 
   /* 移动端强制使用网站字体，覆盖系统字体 */
   @media (max-width: 1024px) {

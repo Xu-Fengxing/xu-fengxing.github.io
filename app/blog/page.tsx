@@ -10,20 +10,19 @@ export default function BlogPage() {
       <Sidebar />
       <main className="flex-1 lg:ml-64">
         <div className="max-w-6xl mx-auto px-6 py-20">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-8"
-          >
-            <ArrowLeft className="h-4 w-4" />
-            返回首页
-          </Link>
-
-          <div className="text-center mb-12">
-            <h1 className="text-3xl md:text-4xl font-bold mb-2">博客</h1>
-            <p className="text-muted-foreground text-base">分享设计思考与技术心得</p>
-          </div>
-
           <div className="max-w-4xl mx-auto">
+            <Link
+              href="/"
+              className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-8"
+            >
+              <ArrowLeft className="h-4 w-4" />
+              返回首页
+            </Link>
+
+            <div className="text-center mb-12">
+              <h1 className="text-3xl md:text-4xl font-bold mb-2">博客</h1>
+              <p className="text-muted-foreground text-base">分享设计思考与技术心得</p>
+            </div>
             <div className="space-y-6">
               {posts.map((post, index) => (
                 <Link
