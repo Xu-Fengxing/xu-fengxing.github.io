@@ -1,0 +1,99 @@
+"use client"
+
+import { Sidebar } from "@/components/sidebar"
+import { Hero } from "@/components/hero"
+import { MBTISection } from "@/components/mbti-section"
+import { useEffect, useState } from "react"
+
+export default function Home() {
+  const [scrollY, setScrollY] = useState(0)
+  const [showMBTI, setShowMBTI] = useState(false)
+
+  const handleToggleMBTI = () => {
+    setShowMBTI(!showMBTI)
+  }
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScroll = window.scrollY
+      setScrollY(currentScroll)
+      
+      // 当滚动超过30px时显示MBTI模块，增加一些缓冲
+      if (currentScroll > 30 && !showMBTI) {
+        setShowMBTI(true)
+      } else if (currentScroll <= 10 && showMBTI) {
+        setShowMBTI(false)
+      }
+    }
+
+    // 添加wheel事件监听器来处理鼠标滚轮
+    const handleWheel = (e: WheelEvent) => {
+      if (!showMBTI && e.deltaY > 0) {
+        // 向下滚动时显示MBTI
+        setShowMBTI(true)
+        e.preventDefault()
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      } else if (showMBTI && e.deltaY < 0) {
+        // 向上滚动时隐藏MBTI
+        setShowMBTI(false)
+        e.preventDefault()
+        window.scrollTo({ top: 0, behavior: 'smooth' })
+      }
+    }
+
+    // 添加键盘事件监听器
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === 'ArrowDown' && !showMBTI) {
+        setShowMBTI(true)
+        e.preventDefault()
+      } else if (e.key === 'ArrowUp' && showMBTI) {
+        setShowMBTI(false)
+        e.preventDefault()
+      }
+    }
+
+    window.addEventListener("scroll", handleScroll, { passive: true })
+    window.addEventListener("wheel", handleWheel, { passive: false })
+    window.addEventListener("keydown", handleKeyDown)
+    
+    return () => {
+      window.removeEventListener("scroll", handleScroll)
+      window.removeEventListener("wheel", handleWheel)
+      window.removeEventListener("keydown", handleKeyDown)
+    }
+  }, [showMBTI])
+
+  return (
+    <div className="flex min-h-screen">
+      <Sidebar />
+      <main className="flex-1 lg:ml-64 relative">
+        {/* Hero组件 - 满屏板块 */}
+        <div 
+          className="fixed inset-0 lg:left-64 transition-all duration-700 ease-in-out"
+          style={{ 
+            opacity: showMBTI ? 0 : 1,
+            transform: showMBTI ? 'translateY(-20px) scale(0.98)' : 'translateY(0) scale(1)',
+            zIndex: showMBTI ? 1 : 2,
+            filter: showMBTI ? 'blur(2px)' : 'blur(0px)'
+          }}
+        >
+          <Hero onToggleMBTI={handleToggleMBTI} />
+        </div>
+
+        {/* MBTI模块 - 满屏板块 */}
+        <div 
+          className="fixed inset-0 lg:left-64 transition-all duration-700 ease-in-out"
+          style={{ 
+            opacity: showMBTI ? 1 : 0,
+            transform: showMBTI ? 'translateY(0) scale(1)' : 'translateY(20px) scale(0.98)',
+            zIndex: showMBTI ? 2 : 1,
+            pointerEvents: showMBTI ? 'auto' : 'none',
+            filter: showMBTI ? 'blur(0px)' : 'blur(2px)'
+          }}
+        >
+          <MBTISection />
+        </div>
+      </main>
+    </div>
+  )
+}
