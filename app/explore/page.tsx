@@ -231,78 +231,79 @@ export default function ExplorePage() {
               <p className="text-muted-foreground text-sm md:text-base px-4">发现有趣的社区，与志同道合的人交流</p>
             </div>
 
-          {/* 分类导航 */}
-          <div className="mb-8">
-            <div className="flex gap-3 overflow-x-auto pb-4">
-              {categories.map((category) => (
-                <button
-                  key={category.id}
-                  onClick={() => setActiveCategory(category.id)}
-                  className={`flex items-center gap-2 px-4 py-2 rounded-full whitespace-nowrap transition-all ${
-                    activeCategory === category.id
-                      ? "bg-accent text-accent-foreground shadow-md"
-                      : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
-                  }`}
-                >
-                  <span className="text-lg">{category.icon}</span>
-                  <span className="font-medium">{category.name}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* 社区列表 */}
-          <div className="space-y-6">
-            <div className="flex items-center justify-between">
-              <h2 className="text-xl font-semibold">
-                {activeCategory === "all" ? "为您推荐" : categories.find(c => c.id === activeCategory)?.name}
-              </h2>
-              {activeCategory !== "all" && (
-                <Link
-                  href="#"
-                  className="text-sm text-muted-foreground hover:text-accent transition-colors"
-                >
-                  查看全部 →
-                </Link>
-              )}
+            {/* 分类导航 */}
+            <div className="mb-8">
+              <div className="flex gap-3 overflow-x-auto pb-4">
+                {categories.map((category) => (
+                  <button
+                    key={category.id}
+                    onClick={() => setActiveCategory(category.id)}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-full whitespace-nowrap transition-all ${
+                      activeCategory === category.id
+                        ? "bg-accent text-accent-foreground shadow-md"
+                        : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
+                    }`}
+                  >
+                    <span className="text-lg">{category.icon}</span>
+                    <span className="font-medium">{category.name}</span>
+                  </button>
+                ))}
+              </div>
             </div>
 
-            <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-              {communities[activeCategory as keyof typeof communities]?.map((community, index) => (
-                <div
-                  key={index}
-                  className="group rounded-xl border border-border bg-card p-6 transition-all hover:border-accent hover:shadow-lg hover:shadow-accent/10 hover:-translate-y-1"
-                >
-                  <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-full bg-gradient-to-br from-accent/30 via-accent/20 to-accent/10 flex items-center justify-center flex-shrink-0">
-                      <span className="text-2xl">{community.icon}</span>
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <h3 className="font-semibold text-lg mb-1 group-hover:text-accent transition-colors">
-                        {community.name}
-                      </h3>
-                      <p className="text-muted-foreground text-sm mb-3 line-clamp-2">
-                        {community.description}
-                      </p>
-                      <div className="flex items-center justify-between">
-                        <span className="text-xs text-muted-foreground">
-                          {community.members} 成员
-                        </span>
-                        <button className="px-4 py-1.5 bg-accent text-accent-foreground rounded-lg hover:bg-accent/90 transition-colors text-sm font-medium">
-                          加入
-                        </button>
+            {/* 社区列表 */}
+            <div className="space-y-6">
+              <div className="flex items-center justify-between">
+                <h2 className="text-xl font-semibold">
+                  {activeCategory === "all" ? "为您推荐" : categories.find(c => c.id === activeCategory)?.name}
+                </h2>
+                {activeCategory !== "all" && (
+                  <Link
+                    href="#"
+                    className="text-sm text-muted-foreground hover:text-accent transition-colors"
+                  >
+                    查看全部 →
+                  </Link>
+                )}
+              </div>
+
+              <div className="grid gap-4 grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                {communities[activeCategory as keyof typeof communities]?.map((community, index) => (
+                  <div
+                    key={index}
+                    className="group rounded-xl border border-border bg-card p-6 transition-all hover:border-accent hover:shadow-lg hover:shadow-accent/10 hover:-translate-y-1"
+                  >
+                    <div className="flex items-start gap-4">
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-accent/30 via-accent/20 to-accent/10 flex items-center justify-center flex-shrink-0">
+                        <span className="text-2xl">{community.icon}</span>
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <h3 className="font-semibold text-lg mb-1 group-hover:text-accent transition-colors">
+                          {community.name}
+                        </h3>
+                        <p className="text-muted-foreground text-sm mb-3 line-clamp-2">
+                          {community.description}
+                        </p>
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs text-muted-foreground">
+                            {community.members} 成员
+                          </span>
+                          <button className="px-4 py-1.5 bg-accent text-accent-foreground rounded-lg hover:bg-accent/90 transition-colors text-sm font-medium">
+                            加入
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              ))}
-            </div>
+                ))}
+              </div>
 
-            {/* 显示更多按钮 */}
-            <div className="text-center pt-6">
-              <button className="px-6 py-2 bg-secondary text-secondary-foreground rounded-lg hover:bg-secondary/80 transition-colors">
-                显示更多
-              </button>
+              {/* 显示更多按钮 */}
+              <div className="text-center pt-6">
+                <button className="px-6 py-2 bg-secondary text-secondary-foreground rounded-lg hover:bg-secondary/80 transition-colors">
+                  显示更多
+                </button>
+              </div>
             </div>
           </div>
         </div>
