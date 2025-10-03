@@ -51,7 +51,7 @@ export default function NotFound() {
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div className="w-48 h-48 rounded-full overflow-hidden bg-gradient-to-br from-accent/20 to-accent/10 backdrop-blur-sm flex items-center justify-center">
                     <img 
-                      src="/404-gif.gif" 
+                      src="/404.gif" 
                       alt="404动画" 
                       className="w-full h-full object-cover rounded-full"
                       onError={(e) => {
