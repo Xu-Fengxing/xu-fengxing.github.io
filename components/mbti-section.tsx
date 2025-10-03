@@ -2,10 +2,19 @@ import { ExternalLink } from "lucide-react"
 
 export function MBTISection() {
   return (
-    <section className="h-screen flex items-center justify-center px-6 py-8 lg:px-8">
+    <section className="h-screen flex items-center justify-center px-6 py-8 lg:px-8 relative">
+      {/* 我的人格标签 - 左上角 */}
+            <div className="absolute top-8 left-8 z-30">
+              <h2 className="text-2xl lg:text-3xl font-semibold text-gray-900 dark:text-white tracking-tight" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif' }}>
+                我的人格
+              </h2>
+              <div className="w-20 h-0.5 bg-gradient-to-r from-accent via-accent/60 to-transparent mt-2"></div>
+            </div>
+      
       <div className="max-w-5xl w-full h-full flex items-center justify-center">
         {/* 主要内容区域 */}
-        <div className="relative bg-gradient-to-br from-background to-secondary/20 rounded-3xl p-6 md:p-8 border border-border/50 overflow-hidden shadow-lg w-full max-h-[90vh] flex flex-col animate-in fade-in-0 slide-in-from-bottom-4 duration-700">
+        <div className="relative bg-gradient-to-br from-background to-secondary/20 rounded-3xl p-6 md:p-8 border border-border/50 overflow-hidden shadow-lg w-full max-h-[85vh] flex flex-col animate-in fade-in-0 slide-in-from-bottom-4 duration-700" style={{ fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif' }}>
+          
           {/* 背景装饰 */}
           <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-bl from-accent/10 to-transparent rounded-full -translate-y-32 translate-x-32"></div>
           <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-accent/5 to-transparent rounded-full translate-y-24 -translate-x-24"></div>
@@ -193,13 +202,13 @@ export function MBTISection() {
         </div>
         
         {/* MBTI跳转按钮 - 集成到卡片内 */}
-        <div className="absolute bottom-6 right-6">
-          <a 
-            href="https://www.16personalities.com/ch" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="inline-flex items-center gap-2 px-4 py-2 bg-accent text-accent-foreground rounded-2xl hover:bg-accent/90 transition-all duration-200 text-sm font-medium shadow-lg hover:shadow-xl hover:scale-105"
-          >
+            <div className="absolute bottom-6 right-6 z-20">
+              <a
+                href="https://www.16personalities.com/ch"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-4 py-2.5 bg-accent text-accent-foreground rounded-full hover:bg-accent/90 transition-all duration-200 text-sm font-medium shadow-lg hover:shadow-xl hover:scale-105"
+              >
             <ExternalLink className="w-4 h-4" />
             测测你的MBTI
           </a>

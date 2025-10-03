@@ -60,7 +60,7 @@ export function Hero({ onToggleMBTI }: HeroProps) {
         </h1>
 
         <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto text-pretty animate-fade-in-up animation-delay-300">
-          一个热爱创造与分享的设计爱好者
+          一个兴趣使然的设计爱好者
         </p>
 
         <div className="flex items-center justify-center gap-4 mt-12 animate-fade-in-up animation-delay-400">

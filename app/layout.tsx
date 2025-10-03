@@ -7,8 +7,8 @@ import { ThemeProvider } from "next-themes"
 import { Suspense } from "react"
 
 export const metadata: Metadata = {
-  title: "风行Justin - 个人作品集",
-  description: "设计师与开发者的个人作品集，展示设计作品和技术项目",
+  title: "风行Justin - 个人空间",
+  description: "设计师与开发者的个人空间，展示设计作品和技术项目",
   generator: "Next.js",
 }
 

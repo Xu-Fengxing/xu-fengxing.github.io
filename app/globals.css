@@ -114,4 +114,39 @@
   body {
     @apply bg-background text-foreground;
   }
+  
+  /* 移除强制缩放，让网页适应系统缩放设置 */
+  
+  /* 修复缩放导致的布局偏移 */
+  body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+  }
+  
+  /* 确保图标正确显示 */
+  .fa, .fas, .far, .fab {
+    font-family: "Font Awesome 6 Free", "Font Awesome 6 Brands" !important;
+    font-weight: 900 !important;
+    font-style: normal !important;
+    font-variant: normal !important;
+    text-rendering: auto !important;
+    line-height: 1 !important;
+  }
+  
+  .fab {
+    font-family: "Font Awesome 6 Brands" !important;
+    font-weight: 400 !important;
+  }
+  
+  /* 确保缩放后的内容居中显示 */
+  .flex.min-h-screen {
+    min-height: 100vh;
+    min-height: 100dvh; /* 动态视口高度，更好的移动端支持 */
+  }
+  
+  /* 修复固定定位元素在缩放后的位置 */
+  .fixed {
+    transform-origin: top left;
+  }
 }

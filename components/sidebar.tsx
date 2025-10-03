@@ -1,18 +1,22 @@
 "use client"
 
 import Link from "next/link"
-import { Home, BookOpen, Briefcase, Menu, X } from "lucide-react"
+import { Home, BookOpen, Menu, X, ExternalLink } from "lucide-react"
 import { useState } from "react"
 import { Button } from "@/components/ui/button"
-import Image from "next/image"
+import { usePathname } from "next/navigation"
 
 export function Sidebar() {
   const [isOpen, setIsOpen] = useState(false)
+  const pathname = usePathname()
 
   const navigation = [
     { name: "首页", href: "/", icon: Home },
     { name: "博客", href: "/blog", icon: BookOpen },
-    { name: "作品集", href: "/portfolio", icon: Briefcase },
+  ]
+
+  const friendLinks = [
+    { name: "Gerrit1999", href: "https://gerrit1999.github.io/", description: "星轨时光机" },
   ]
 
   return (
@@ -57,12 +61,17 @@ export function Sidebar() {
           <nav className="flex-1 space-y-1 px-3 py-6">
             {navigation.map((item) => {
               const Icon = item.icon
+              const isActive = pathname === item.href
               return (
                 <Link
                   key={item.name}
                   href={item.href}
                   onClick={() => setIsOpen(false)}
-                  className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium text-sidebar-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground group"
+                  className={`flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors group ${
+                    isActive
+                      ? "bg-sidebar-accent text-sidebar-accent-foreground"
+                      : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
+                  }`}
                 >
                   <Icon className="h-5 w-5 transition-transform group-hover:scale-110" />
                   {item.name}
@@ -71,9 +80,55 @@ export function Sidebar() {
             })}
           </nav>
 
+          {/* Friend Links */}
+          <div className="border-t border-sidebar-border px-6 py-3">
+            <div className="flex items-center justify-between mb-2">
+              <h3 className="text-sm font-semibold text-sidebar-foreground">友链</h3>
+              <Link
+                href="/friends"
+                className="text-xs text-muted-foreground hover:text-accent transition-colors"
+                onClick={() => setIsOpen(false)}
+              >
+                更多
+              </Link>
+            </div>
+            <div className="space-y-1">
+              {friendLinks.map((link) => (
+                <a
+                  key={link.name}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-3 rounded-lg px-3 py-3 text-xs font-medium text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-sidebar-accent-foreground group"
+                  onClick={() => setIsOpen(false)}
+                >
+                  {/* 首字母圆形标识 */}
+                  <div className="w-8 h-8 rounded-full bg-gradient-to-br from-accent/30 to-accent/10 flex items-center justify-center flex-shrink-0">
+                    <span className="text-xs font-bold text-accent">
+                      {link.name.charAt(0)}
+                    </span>
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div className="truncate font-medium">{link.name}</div>
+                    <div className="truncate text-xs text-muted-foreground/70">{link.description}</div>
+                  </div>
+                  <ExternalLink className="h-3 w-3 opacity-0 group-hover:opacity-100 transition-opacity flex-shrink-0" />
+                </a>
+              ))}
+            </div>
+          </div>
+
           {/* Footer */}
-          <div className="border-t border-sidebar-border p-6">
-            <p className="text-xs text-muted-foreground text-center">© 2025 fengxing.site</p>
+          <div className="border-t border-sidebar-border px-6 pt-4 pb-3">
+            <p className="text-xs text-muted-foreground text-center mb-0.5">© 2025 fengxing.site</p>
+            <a
+              href="https://icp.gov.moe/?keyword=20250119"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-xs text-muted-foreground/70 hover:text-accent transition-colors text-center block"
+            >
+              萌ICP备20250119号
+            </a>
           </div>
         </div>
       </aside>
