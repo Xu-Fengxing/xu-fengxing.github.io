@@ -38,6 +38,12 @@ export default function Home() {
         setShowMBTI(false)
         e.preventDefault()
         window.scrollTo({ top: 0, behavior: 'smooth' })
+      } else if (showMBTI && e.deltaY > 0) {
+        // 在MBTI模块继续向下滚动时，跳转到博客页面（仅电脑端）
+        if (window.innerWidth >= 1024) { // lg断点以上
+          e.preventDefault()
+          window.location.href = '/blog'
+        }
       }
     }
 

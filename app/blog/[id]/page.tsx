@@ -87,7 +87,7 @@ export default function BlogPostPage({ params }: { params: { id: string } }) {
                 } else if (line.startsWith('#### ')) {
                   return (
                     <div key={index} className="mb-1">
-                      <h4 className="text-base font-semibold text-gray-800 dark:text-gray-200 mb-0">
+                      <h4 className="text-base font-semibold text-gray-800 dark:text-gray-200 mb-2">
                         {line.slice(5)}
                       </h4>
                     </div>
