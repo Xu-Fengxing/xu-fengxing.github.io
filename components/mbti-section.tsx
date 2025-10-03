@@ -197,7 +197,7 @@ export function MBTISection() {
                         <div className="relative h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                           <div 
                             className="absolute top-0 right-0 h-full rounded-full transition-all duration-1000 ease-out"
-                            style={{ width: '65%', backgroundColor: '#88619A' }}
+                            style={{ width: '65%', backgroundColor: '#4298B4' }}
                           ></div>
                         </div>
                       </div>
@@ -377,7 +377,7 @@ export function MBTISection() {
                         <div className="relative h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                           <div 
                             className="absolute top-0 right-0 h-full rounded-full transition-all duration-1000 ease-out"
-                            style={{ width: '65%', backgroundColor: '#88619A' }}
+                            style={{ width: '65%', backgroundColor: '#4298B4' }}
                           ></div>
                         </div>
                       </div>
