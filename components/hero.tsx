@@ -86,7 +86,7 @@ export function Hero({ onToggleMBTI }: HeroProps) {
           onClick={onToggleMBTI}
         >
           <div className="flex flex-col items-center justify-center gap-2 text-muted-foreground hover:text-accent transition-colors">
-            <i className="fa-solid fa-chevron-down text-2xl" style={{ 
+            <i className="fa-solid fa-chevron-down-left text-2xl" style={{ 
               fontFamily: '"Font Awesome 6 Free"', 
               fontWeight: 900,
               display: 'block',
