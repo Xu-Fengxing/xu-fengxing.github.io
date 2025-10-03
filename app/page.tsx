@@ -71,6 +71,10 @@ export default function Home() {
       }
     }
 
+    const handleTouchEnd = (e: TouchEvent) => {
+      // 触摸结束时的处理
+    }
+
     // 添加键盘事件监听器
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'ArrowDown' && !showMBTI) {
@@ -86,6 +90,7 @@ export default function Home() {
     window.addEventListener("wheel", handleWheel, { passive: false })
     window.addEventListener("touchstart", handleTouchStart, { passive: true })
     window.addEventListener("touchmove", handleTouchMove, { passive: false })
+    window.addEventListener("touchend", handleTouchEnd, { passive: true })
     window.addEventListener("keydown", handleKeyDown)
     
     return () => {
@@ -93,6 +98,7 @@ export default function Home() {
       window.removeEventListener("wheel", handleWheel)
       window.removeEventListener("touchstart", handleTouchStart)
       window.removeEventListener("touchmove", handleTouchMove)
+      window.removeEventListener("touchend", handleTouchEnd)
       window.removeEventListener("keydown", handleKeyDown)
     }
   }, [showMBTI])
@@ -108,7 +114,8 @@ export default function Home() {
             opacity: showMBTI ? 0 : 1,
             transform: showMBTI ? 'translateY(-20px) scale(0.98)' : 'translateY(0) scale(1)',
             zIndex: showMBTI ? 1 : 2,
-            filter: showMBTI ? 'blur(2px)' : 'blur(0px)'
+            filter: showMBTI ? 'blur(2px)' : 'blur(0px)',
+            pointerEvents: showMBTI ? 'none' : 'auto'
           }}
         >
           <Hero onToggleMBTI={handleToggleMBTI} />

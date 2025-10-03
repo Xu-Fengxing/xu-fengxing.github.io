@@ -138,9 +138,9 @@ export function MBTISection() {
                     {/* 内向 vs 外向 */}
                     <div className="space-y-2">
                       <div className="flex justify-between items-center text-sm font-medium text-gray-600 dark:text-gray-400">
-                        <span className="w-16 text-left">外向</span>
+                        <span className="w-12 text-left">外向</span>
                         <span className="text-sm font-bold" style={{ color: '#4298B4' }}>82% 内向</span>
-                        <span className="w-16 text-right">内向</span>
+                        <span className="w-12 text-right">内向</span>
                       </div>
                       <div className="relative">
                         <div className="relative h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
@@ -155,9 +155,9 @@ export function MBTISection() {
                     {/* 求真务实 vs 天马行空 */}
                     <div className="space-y-2">
                       <div className="flex justify-between items-center text-sm font-medium text-gray-600 dark:text-gray-400">
-                        <span className="w-16 text-left">天马行空</span>
+                        <span className="w-12 text-left">天马行空</span>
                         <span className="text-sm font-bold" style={{ color: '#E4AE3A' }}>72% 求真务实</span>
-                        <span className="w-16 text-right">求真务实</span>
+                        <span className="w-12 text-right">求真务实</span>
                       </div>
                       <div className="relative">
                         <div className="relative h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
@@ -172,9 +172,9 @@ export function MBTISection() {
                     {/* 理性思考 vs 情感细腻 */}
                     <div className="space-y-2">
                       <div className="flex justify-between items-center text-sm font-medium text-gray-600 dark:text-gray-400">
-                        <span className="w-16 text-left">理性思考</span>
+                        <span className="w-12 text-left">理性思考</span>
                         <span className="text-sm font-bold" style={{ color: '#33A474' }}>53% 理性思考</span>
-                        <span className="w-16 text-right">情感细腻</span>
+                        <span className="w-12 text-right">情感细腻</span>
                       </div>
                       <div className="relative">
                         <div className="relative h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
@@ -189,15 +189,15 @@ export function MBTISection() {
                     {/* 随机应变 vs 运筹帷幄 */}
                     <div className="space-y-2">
                       <div className="flex justify-between items-center text-sm font-medium text-gray-600 dark:text-gray-400">
-                        <span className="w-16 text-left">运筹帷幄</span>
+                        <span className="w-12 text-left">运筹帷幄</span>
                         <span className="text-sm font-bold" style={{ color: '#88619A' }}>65% 随机应变</span>
-                        <span className="w-16 text-right">随机应变</span>
+                        <span className="w-12 text-right">随机应变</span>
                       </div>
                       <div className="relative">
                         <div className="relative h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                           <div 
                             className="absolute top-0 right-0 h-full rounded-full transition-all duration-1000 ease-out"
-                            style={{ width: '65%', backgroundColor: '#4298B4' }}
+                            style={{ width: '65%', backgroundColor: '#88619A' }}
                           ></div>
                         </div>
                       </div>
@@ -206,9 +206,9 @@ export function MBTISection() {
                     {/* 情绪易波动 vs 自信果断 */}
                     <div className="space-y-2">
                       <div className="flex justify-between items-center text-sm font-medium text-gray-600 dark:text-gray-400">
-                        <span className="w-16 text-left">自信果断</span>
+                        <span className="w-12 text-left">自信果断</span>
                         <span className="text-sm font-bold" style={{ color: '#F25E62' }}>56% 情绪易波动</span>
-                        <span className="w-16 text-right">情绪易波动</span>
+                        <span className="w-12 text-right">情绪易波动</span>
                       </div>
                       <div className="relative">
                         <div className="relative h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
@@ -377,7 +377,7 @@ export function MBTISection() {
                         <div className="relative h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                           <div 
                             className="absolute top-0 right-0 h-full rounded-full transition-all duration-1000 ease-out"
-                            style={{ width: '65%', backgroundColor: '#4298B4' }}
+                            style={{ width: '65%', backgroundColor: '#88619A' }}
                           ></div>
                         </div>
                       </div>

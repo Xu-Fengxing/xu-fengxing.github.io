@@ -82,11 +82,17 @@ export function Hero({ onToggleMBTI }: HeroProps) {
       </div>
 
       <div 
-        className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce pointer-events-auto cursor-pointer hover:scale-110 transition-transform"
+        className="absolute bottom-8 left-1/2 -translate-x-1/2 animate-bounce pointer-events-auto cursor-pointer hover:scale-110 transition-transform z-10"
         onClick={onToggleMBTI}
       >
         <div className="flex flex-col items-center gap-2 text-muted-foreground hover:text-accent transition-colors">
-          <i className="fa-solid fa-chevron-down text-2xl"></i>
+          <i className="fa-solid fa-chevron-down text-2xl" style={{ 
+            fontFamily: '"Font Awesome 6 Free"', 
+            fontWeight: 900,
+            display: 'inline-block',
+            textRendering: 'auto',
+            WebkitFontSmoothing: 'antialiased'
+          }}></i>
         </div>
       </div>
     </section>
