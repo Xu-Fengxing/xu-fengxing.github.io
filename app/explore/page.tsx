@@ -1,3 +1,5 @@
+"use client"
+
 import { Sidebar } from "@/components/sidebar"
 import { ArrowLeft, ExternalLink } from "lucide-react"
 import Link from "next/link"
