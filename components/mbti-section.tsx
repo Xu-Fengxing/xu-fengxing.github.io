@@ -37,12 +37,12 @@ export function MBTISection() {
 
   return (
     <section className="h-screen flex items-center justify-center px-6 py-8 lg:px-8 relative">
-      {/* 我的人格标签 - 左上角 */}
-      <div className="absolute top-8 left-8 z-30">
-        <h2 className="text-2xl lg:text-3xl font-semibold text-gray-900 dark:text-white tracking-tight" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif' }}>
+      {/* 我的人格标签 - 移动端居中，桌面端左上角 */}
+      <div className="absolute top-8 left-1/2 -translate-x-1/2 lg:left-8 lg:translate-x-0 z-30">
+        <h2 className="text-2xl lg:text-3xl font-semibold text-gray-900 dark:text-white tracking-tight text-center lg:text-left" style={{ fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif' }}>
           我的人格
         </h2>
-        <div className="w-20 h-0.5 bg-gradient-to-r from-accent via-accent/60 to-transparent mt-2"></div>
+        <div className="w-20 h-0.5 bg-gradient-to-r from-accent via-accent/60 to-transparent mt-2 mx-auto lg:mx-0"></div>
       </div>
       
       <div className="max-w-5xl w-full h-full flex items-center justify-center">

@@ -22,14 +22,16 @@ export function Sidebar() {
   return (
     <>
       {/* Mobile menu button */}
-      <Button
-        variant="ghost"
-        size="icon"
-        className="fixed top-4 left-4 z-50 lg:hidden bg-background/90 backdrop-blur-sm border border-border/50 shadow-lg hover:bg-background/95"
-        onClick={() => setIsOpen(!isOpen)}
-      >
-        <Menu className="h-5 w-5" />
-      </Button>
+      {!isOpen && (
+        <Button
+          variant="ghost"
+          size="icon"
+          className="fixed top-4 left-4 z-50 lg:hidden bg-background/90 backdrop-blur-sm border border-border/50 shadow-lg hover:bg-background/95"
+          onClick={() => setIsOpen(!isOpen)}
+        >
+          <Menu className="h-5 w-5" />
+        </Button>
+      )}
 
       {/* Sidebar */}
       <aside
