@@ -1,4 +1,5 @@
 import { Sidebar } from "@/components/sidebar"
+import { TableOfContents } from "@/components/table-of-contents"
 import { ArrowLeft, Calendar, Tag } from "lucide-react"
 import Link from "next/link"
 import { posts } from "@/lib/posts"
@@ -38,7 +39,10 @@ export default function BlogPostPage({ params }: { params: { id: string } }) {
     <div className="flex min-h-screen">
       <Sidebar />
       <main id="top" className="flex-1 lg:ml-64">
-        <div className="max-w-4xl mx-auto px-6 py-20">
+        <div className="max-w-6xl mx-auto px-6 py-20">
+          <div className="flex gap-8">
+            {/* 文章内容区域 */}
+            <div className="flex-1 max-w-4xl">
           <Link
             href="/blog"
             className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-8"
@@ -72,14 +76,14 @@ export default function BlogPostPage({ params }: { params: { id: string } }) {
                 } else if (line.startsWith('## ')) {
                   return (
                     <div key={index} className="mb-1">
-                      <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-0">{line.slice(3)}</h2>
+                      <h2 id={`heading-${index}`} className="text-2xl font-bold text-gray-900 dark:text-white mb-0">{line.slice(3)}</h2>
                       <hr className="border-0 h-[0.5px] bg-gray-300 dark:bg-gray-600 mt-1" />
                     </div>
                   )
                 } else if (line.startsWith('### ')) {
                   return (
                     <div key={index} className="mb-1">
-                      <h3 className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-0">
+                      <h3 id={`heading-${index}`} className="text-lg font-semibold text-gray-800 dark:text-gray-200 mb-0">
                         {line.slice(4)}
                       </h3>
                     </div>
@@ -87,7 +91,7 @@ export default function BlogPostPage({ params }: { params: { id: string } }) {
                 } else if (line.startsWith('#### ')) {
                   return (
                     <div key={index} className="mb-1">
-                      <h4 className="text-base font-semibold text-gray-800 dark:text-gray-200 mb-2">
+                      <h4 id={`heading-${index}`} className="text-base font-semibold text-gray-800 dark:text-gray-200 mb-2">
                         {line.slice(5)}
                       </h4>
                     </div>
@@ -146,6 +150,13 @@ export default function BlogPostPage({ params }: { params: { id: string } }) {
               })}
             </div>
           </article>
+            </div>
+            
+            {/* 目录区域 */}
+            <div className="hidden lg:block w-64 flex-shrink-0">
+              <TableOfContents content={post.content} />
+            </div>
+          </div>
         </div>
       </main>
     </div>
