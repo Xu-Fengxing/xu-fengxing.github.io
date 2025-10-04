@@ -64,7 +64,23 @@ export default function BlogPostPage({ params }: { params: { id: string } }) {
                 </div>
               </div>
               <h1 className="text-4xl md:text-5xl font-bold mb-4">{post.title}</h1>
-              <p className="text-lg text-muted-foreground mb-6">{post.excerpt}</p>
+              <p className="text-lg text-muted-foreground mb-4">{post.excerpt}</p>
+              
+              {/* 字数统计和阅读时间 */}
+              <div className="flex items-center gap-4 text-sm text-muted-foreground mb-6">
+                <div className="flex items-center gap-1">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                  </svg>
+                  <span>{post.content.length} 字</span>
+                </div>
+                <div className="flex items-center gap-1">
+                  <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                  </svg>
+                  <span>{Math.ceil(post.content.length / 300)} 分钟阅读</span>
+                </div>
+              </div>
             </header>
 
 
@@ -148,6 +164,50 @@ export default function BlogPostPage({ params }: { params: { id: string } }) {
                   )
                 }
               })}
+            </div>
+            
+            {/* 版权信息卡片 */}
+            <div className="mt-12 p-6 bg-card/50 backdrop-blur-sm border border-border/50 rounded-xl shadow-sm">
+              <div className="flex items-start justify-between">
+                <div className="flex-1">
+                  <h3 className="text-lg font-semibold text-foreground mb-2">{post.title}</h3>
+                  <a 
+                    href={`https://fengxing.site/blog/${post.id}`}
+                    className="text-accent hover:text-accent/80 transition-colors text-sm mb-3 block"
+                  >
+                    https://fengxing.site/blog/{post.id}
+                  </a>
+                  
+                  <div className="space-y-1 text-sm text-muted-foreground">
+                    <div className="flex items-center gap-2">
+                      <span className="font-medium">作者</span>
+                      <span className="text-foreground">风行Justin</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="font-medium">发布于</span>
+                      <span className="text-foreground">{post.date}</span>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="font-medium">许可协议</span>
+                      <a 
+                        href="https://creativecommons.org/licenses/by-nc-sa/4.0/"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-accent hover:text-accent/80 transition-colors"
+                      >
+                        CC BY-NC-SA 4.0
+                      </a>
+                    </div>
+                  </div>
+                </div>
+                
+                {/* CC 标志 */}
+                <div className="ml-6 flex-shrink-0">
+                  <div className="w-20 h-20 flex items-center justify-center bg-accent/10 rounded-lg">
+                    <div className="text-3xl font-bold text-accent/60">CC</div>
+                  </div>
+                </div>
+              </div>
             </div>
           </article>
             </div>

@@ -15,6 +15,7 @@ interface TableOfContentsProps {
 export function TableOfContents({ content }: TableOfContentsProps) {
   const [tocItems, setTocItems] = useState<TocItem[]>([])
   const [activeId, setActiveId] = useState<string>("")
+  const [readingProgress, setReadingProgress] = useState<number>(0)
 
   // 生成目录项
   useEffect(() => {
@@ -52,17 +53,33 @@ export function TableOfContents({ content }: TableOfContentsProps) {
     setTocItems(items)
   }, [content])
 
-  // 监听滚动，更新当前活跃的标题
+  // 监听滚动，更新当前活跃的标题和阅读进度
   useEffect(() => {
     const handleScroll = () => {
       const headings = tocItems.map(item => document.getElementById(item.id)).filter(Boolean)
       
+      // 更新活跃标题
       for (let i = headings.length - 1; i >= 0; i--) {
         const heading = headings[i]
         if (heading && heading.getBoundingClientRect().top <= 100) {
           setActiveId(tocItems[i].id)
           break
         }
+      }
+      
+      // 计算阅读进度
+      const article = document.querySelector('article')
+      if (article) {
+        const articleTop = article.offsetTop
+        const articleHeight = article.offsetHeight
+        const windowHeight = window.innerHeight
+        const scrollTop = window.scrollY
+        
+        const progress = Math.min(
+          Math.max((scrollTop - articleTop + windowHeight) / articleHeight, 0),
+          1
+        )
+        setReadingProgress(Math.round(progress * 100))
       }
     }
 
@@ -91,6 +108,20 @@ export function TableOfContents({ content }: TableOfContentsProps) {
           </svg>
           目录
         </h3>
+        
+        {/* 阅读进度 */}
+        <div className="mb-4">
+          <div className="flex items-center justify-between text-xs text-muted-foreground mb-2">
+            <span>阅读进度</span>
+            <span>{readingProgress}%</span>
+          </div>
+          <div className="w-full bg-muted rounded-full h-1.5">
+            <div 
+              className="bg-accent h-1.5 rounded-full transition-all duration-300 ease-out"
+              style={{ width: `${readingProgress}%` }}
+            ></div>
+          </div>
+        </div>
         <nav className="space-y-2">
           {tocItems.map((item) => (
             <button
