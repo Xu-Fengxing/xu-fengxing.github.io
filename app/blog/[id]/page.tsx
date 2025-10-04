@@ -142,19 +142,8 @@ export default function BlogPostPage({ params }: { params: { id: string } }) {
                 } else if (line === '---') {
                   return null
                 } else if (line.startsWith('*') && line.endsWith('*')) {
-                  return (
-                    <div key={index} className="mt-8 text-center">
-                      <a 
-                        href="#top" 
-                        className="inline-flex items-center gap-2 px-4 py-2 bg-accent text-accent-foreground rounded-full hover:bg-accent/90 transition-colors text-sm font-medium"
-                      >
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                          <path d="m18 15-6-6-6 6"/>
-                        </svg>
-                        返回顶部
-                      </a>
-                    </div>
-                  )
+                  // 跳过文章内容中的返回顶部按钮，因为页面底部已经有了
+                  return null
                 } else if (line.trim() === '') {
                   return <div key={index} className="h-1"></div>
                 } else {

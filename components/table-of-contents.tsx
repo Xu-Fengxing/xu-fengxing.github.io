@@ -16,6 +16,7 @@ export function TableOfContents({ content }: TableOfContentsProps) {
   const [tocItems, setTocItems] = useState<TocItem[]>([])
   const [activeIds, setActiveIds] = useState<string[]>([])
   const [readingProgress, setReadingProgress] = useState<number>(0)
+  const [currentActiveIndex, setCurrentActiveIndex] = useState<number>(0)
 
   // 生成目录项
   useEffect(() => {
@@ -58,14 +59,20 @@ export function TableOfContents({ content }: TableOfContentsProps) {
     const handleScroll = () => {
       const headings = tocItems.map(item => document.getElementById(item.id)).filter(Boolean)
       const activeHeadingIds: string[] = []
+      let primaryActiveIndex = 0
       
-      // 检查哪些标题在当前视口中
+      // 检查哪些标题在当前视口中（扩大检测范围）
       headings.forEach((heading, index) => {
         if (heading) {
           const rect = heading.getBoundingClientRect()
-          const isVisible = rect.top <= window.innerHeight * 0.6 && rect.bottom >= window.innerHeight * 0.4
+          // 扩大可见范围：标题顶部在屏幕80%以内，底部在屏幕20%以上
+          const isVisible = rect.top <= window.innerHeight * 0.8 && rect.bottom >= window.innerHeight * 0.2
           if (isVisible) {
             activeHeadingIds.push(tocItems[index].id)
+            // 找到最接近屏幕顶部的标题作为主要活跃项
+            if (rect.top <= window.innerHeight * 0.5) {
+              primaryActiveIndex = index
+            }
           }
         }
       })
@@ -74,14 +81,16 @@ export function TableOfContents({ content }: TableOfContentsProps) {
       if (activeHeadingIds.length === 0 && headings.length > 0) {
         for (let i = headings.length - 1; i >= 0; i--) {
           const heading = headings[i]
-          if (heading && heading.getBoundingClientRect().top <= 100) {
+          if (heading && heading.getBoundingClientRect().top <= 150) {
             activeHeadingIds.push(tocItems[i].id)
+            primaryActiveIndex = i
             break
           }
         }
       }
       
       setActiveIds(activeHeadingIds)
+      setCurrentActiveIndex(primaryActiveIndex)
       
       // 计算阅读进度
       const article = document.querySelector('article')
@@ -150,7 +159,7 @@ export function TableOfContents({ content }: TableOfContentsProps) {
               } ${
                 item.level === 2 ? 'pl-0 font-medium' :
                 item.level === 3 ? 'pl-4' :
-                item.level === 4 ? 'pl-8 text-xs' : 'pl-0'
+                item.level === 4 ? 'pl-8' : 'pl-0'
               }`}
             >
               {item.text}
