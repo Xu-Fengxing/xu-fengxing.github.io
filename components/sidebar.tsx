@@ -86,7 +86,7 @@ export function Sidebar() {
 
           {/* Footer */}
           <div className="border-t border-sidebar-border px-6 pt-4 pb-3">
-            <p className="text-xs text-muted-foreground text-center mb-0.5">© 2025 fengxing.site</p>
+            <p className="text-xs text-muted-foreground text-center mb-0.5">© 2025 fengx.ing</p>
             <a
               href="https://icp.gov.moe/?keyword=20250119"
               target="_blank"
