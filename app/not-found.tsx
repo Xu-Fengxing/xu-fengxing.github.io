@@ -7,19 +7,12 @@ import Link from "next/link"
 export default function NotFound() {
 
   return (
-    <>
-      <style jsx>{`
-        @keyframes breathe {
-          0%, 100% { opacity: 0.8; }
-          50% { opacity: 1; }
-        }
-      `}</style>
-      <div className="flex min-h-screen">
+    <div className="flex min-h-screen">
       <Sidebar />
       <main className="flex-1 lg:ml-64">
         <div className="max-w-6xl mx-auto px-6 py-20">
           <div className="max-w-4xl mx-auto">
-            <div className="text-center flex flex-col items-center justify-center min-h-[60vh]">
+            <div className="text-center flex flex-col items-center justify-center min-h-[80vh]">
               {/* 404 数字显示 */}
               <div className="mb-6">
                 <h1 className="text-8xl md:text-9xl font-bold text-accent" style={{
@@ -61,7 +54,7 @@ export default function NotFound() {
               <div className="mt-8">
                 <Link
                   href="/"
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-accent text-accent-foreground rounded-lg hover:bg-accent/90 transition-colors font-medium"
+                  className="inline-flex items-center gap-2 px-8 py-4 bg-accent text-accent-foreground rounded-2xl hover:bg-accent/90 transition-colors font-medium shadow-lg hover:shadow-xl"
                 >
                   <Home className="w-4 h-4" />
                   返回首页
@@ -71,8 +64,6 @@ export default function NotFound() {
           </div>
         </div>
       </main>
-
-      </div>
-    </>
+    </div>
   )
 }

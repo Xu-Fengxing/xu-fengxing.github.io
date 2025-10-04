@@ -239,10 +239,20 @@
       font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif !important;
     }
     
-    /* 特别针对可能的幼圆字体覆盖 */
-    [style*="幼圆"], [style*="YouYuan"], [style*="SimSun"], [style*="宋体"], [style*="黑体"], [style*="微软雅黑"] {
-      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif !important;
-    }
+  /* 特别针对可能的幼圆字体覆盖 */
+  [style*="幼圆"], [style*="YouYuan"], [style*="SimSun"], [style*="宋体"], [style*="黑体"], [style*="微软雅黑"] {
+    font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif !important;
   }
+}
+
+/* 404页面呼吸动画 */
+@keyframes breathe {
+  0%, 100% { 
+    opacity: 0.8; 
+  }
+  50% { 
+    opacity: 1; 
+  }
+}
 
 }

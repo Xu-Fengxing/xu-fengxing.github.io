@@ -1,5 +1,6 @@
 import { Sidebar } from "@/components/sidebar"
 import { TableOfContents } from "@/components/table-of-contents"
+import { BackToTop } from "@/components/back-to-top"
 import { ArrowLeft, Calendar, Tag } from "lucide-react"
 import Link from "next/link"
 import { posts } from "@/lib/posts"
@@ -172,10 +173,10 @@ export default function BlogPostPage({ params }: { params: { id: string } }) {
                 <div className="flex-1">
                   <h3 className="text-lg font-semibold text-foreground mb-2">{post.title}</h3>
                   <a 
-                    href={`https://fengxing.site/blog/${post.id}`}
+                    href={`https://forthing.top/blog/${post.id}`}
                     className="text-accent hover:text-accent/80 transition-colors text-sm mb-3 block"
                   >
-                    https://fengxing.site/blog/{post.id}
+                    https://forthing.top/blog/{post.id}
                   </a>
                   
                   <div className="space-y-1 text-sm text-muted-foreground">
@@ -217,6 +218,9 @@ export default function BlogPostPage({ params }: { params: { id: string } }) {
               <TableOfContents content={post.content} />
             </div>
           </div>
+          
+          {/* 返回顶部按钮 */}
+          <BackToTop />
         </div>
       </main>
     </div>

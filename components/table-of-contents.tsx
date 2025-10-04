@@ -14,7 +14,7 @@ interface TableOfContentsProps {
 
 export function TableOfContents({ content }: TableOfContentsProps) {
   const [tocItems, setTocItems] = useState<TocItem[]>([])
-  const [activeId, setActiveId] = useState<string>("")
+  const [activeIds, setActiveIds] = useState<string[]>([])
   const [readingProgress, setReadingProgress] = useState<number>(0)
 
   // 生成目录项
@@ -57,15 +57,31 @@ export function TableOfContents({ content }: TableOfContentsProps) {
   useEffect(() => {
     const handleScroll = () => {
       const headings = tocItems.map(item => document.getElementById(item.id)).filter(Boolean)
+      const activeHeadingIds: string[] = []
       
-      // 更新活跃标题
-      for (let i = headings.length - 1; i >= 0; i--) {
-        const heading = headings[i]
-        if (heading && heading.getBoundingClientRect().top <= 100) {
-          setActiveId(tocItems[i].id)
-          break
+      // 检查哪些标题在当前视口中
+      headings.forEach((heading, index) => {
+        if (heading) {
+          const rect = heading.getBoundingClientRect()
+          const isVisible = rect.top <= window.innerHeight * 0.6 && rect.bottom >= window.innerHeight * 0.4
+          if (isVisible) {
+            activeHeadingIds.push(tocItems[index].id)
+          }
+        }
+      })
+      
+      // 如果没有标题在视口中，选择最接近的标题
+      if (activeHeadingIds.length === 0 && headings.length > 0) {
+        for (let i = headings.length - 1; i >= 0; i--) {
+          const heading = headings[i]
+          if (heading && heading.getBoundingClientRect().top <= 100) {
+            activeHeadingIds.push(tocItems[i].id)
+            break
+          }
         }
       }
+      
+      setActiveIds(activeHeadingIds)
       
       // 计算阅读进度
       const article = document.querySelector('article')
@@ -122,19 +138,19 @@ export function TableOfContents({ content }: TableOfContentsProps) {
             ></div>
           </div>
         </div>
-        <nav className="space-y-2">
+        <nav className="space-y-1">
           {tocItems.map((item) => (
             <button
               key={item.id}
               onClick={() => scrollToHeading(item.id)}
-              className={`block w-full text-left text-sm transition-all duration-200 hover:text-accent hover:bg-accent/5 rounded-md px-2 py-1.5 ${
-                activeId === item.id
+              className={`block w-full text-left text-sm transition-all duration-200 hover:text-accent hover:bg-accent/5 rounded-lg px-3 py-2 ${
+                activeIds.includes(item.id)
                   ? 'text-accent font-medium bg-accent/10'
                   : 'text-muted-foreground hover:text-foreground'
               } ${
                 item.level === 2 ? 'pl-0 font-medium' :
-                item.level === 3 ? 'pl-3' :
-                item.level === 4 ? 'pl-6 text-xs' : 'pl-0'
+                item.level === 3 ? 'pl-4' :
+                item.level === 4 ? 'pl-8 text-xs' : 'pl-0'
               }`}
             >
               {item.text}

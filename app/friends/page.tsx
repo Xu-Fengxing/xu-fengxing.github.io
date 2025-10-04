@@ -20,6 +20,14 @@ export default function FriendsPage() {
       tags: ["个人网站", "技术", "分享"],
       icon: "fa-solid fa-globe"
     },
+    {
+      name: "张洪Heo",
+      url: "https://blog.zhheo.com/",
+      description: "分享设计与科技生活 - 产品、交互、设计、开发",
+      avatar: "https://blog.zhheo.com/avatar.jpg",
+      tags: ["设计", "开发", "产品", "教程"],
+      icon: "fa-solid fa-palette"
+    },
     // 可以在这里添加更多友链
   ]
 
