@@ -15,7 +15,7 @@ export default function FriendsPage() {
     {
       name: "Champhoon",
       url: "https://champhoon.xyz/",
-      description: "Champhoon的个人网站",
+      description: "澄沨的漫游茶记",
       avatar: "https://champhoon.xyz/avatar.jpg",
       tags: ["个人网站", "技术", "分享"],
       icon: "fa-solid fa-globe"
