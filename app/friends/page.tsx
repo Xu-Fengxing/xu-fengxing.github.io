@@ -12,6 +12,14 @@ export default function FriendsPage() {
       tags: ["技术博客", "Java", "Spring"],
       icon: "fa-solid fa-blog"
     },
+    {
+      name: "Champhoon",
+      url: "https://champhoon.xyz/",
+      description: "Champhoon的个人网站",
+      avatar: "https://champhoon.xyz/avatar.jpg",
+      tags: ["个人网站", "技术", "分享"],
+      icon: "fa-solid fa-globe"
+    },
     // 可以在这里添加更多友链
   ]
 
