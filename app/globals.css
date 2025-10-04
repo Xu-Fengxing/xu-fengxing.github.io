@@ -244,4 +244,64 @@
       font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "Helvetica Neue", Arial, sans-serif !important;
     }
   }
+
+  /* 自定义光标样式 - 使用您自己的光标文件 */
+  
+  /* 默认光标 */
+  * {
+    cursor: url('/cursors/default.png'), auto !important;
+  }
+  
+  /* 链接悬停光标 */
+  a, button, [role="button"], [onclick] {
+    cursor: url('/cursors/pointer.png'), pointer !important;
+  }
+  
+  /* 文本选择光标 */
+  input, textarea, [contenteditable], [role="textbox"] {
+    cursor: url('/cursors/text.png'), text !important;
+  }
+  
+  /* 禁用状态光标 */
+  [disabled], .disabled {
+    cursor: url('/cursors/disabled.png'), not-allowed !important;
+  }
+  
+  /* 拖拽光标 */
+  [draggable="true"] {
+    cursor: url('/cursors/grab.png'), grab !important;
+  }
+  
+  [draggable="true"]:active {
+    cursor: url('/cursors/grabbing.png'), grabbing !important;
+  }
+  
+  /* 调整大小光标 */
+  .resize-horizontal {
+    cursor: url('/cursors/resize-horizontal.png'), ew-resize !important;
+  }
+  
+  .resize-vertical {
+    cursor: url('/cursors/resize-vertical.png'), ns-resize !important;
+  }
+  
+  /* 等待光标 */
+  .loading {
+    cursor: url('/cursors/loading.png'), wait !important;
+  }
+  
+  /* 移动光标 */
+  .move {
+    cursor: url('/cursors/move.png'), move !important;
+  }
+  
+  /* 帮助光标 */
+  .help {
+    cursor: url('/cursors/help.png'), help !important;
+  }
+  
+  /* 十字光标 */
+  .crosshair {
+    cursor: url('/cursors/crosshair.png'), crosshair !important;
+  }
 }
