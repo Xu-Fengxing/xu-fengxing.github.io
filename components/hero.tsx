@@ -80,6 +80,36 @@ export function Hero({ onToggleMBTI }: HeroProps) {
           })}
         </div>
 
+        {/* Scroll down arrow - positioned below the icon row */}
+        <div className="flex justify-center mt-24 animate-bounce" style={{animationDuration: '2s'}}>
+          <button
+            onClick={() => {
+              console.log('Arrow clicked!')
+              const mbtiSection = document.getElementById('mbti-section')
+              console.log('MBTI section found:', mbtiSection)
+              if (mbtiSection) {
+                mbtiSection.scrollIntoView({ behavior: 'smooth' })
+                console.log('Scrolling to MBTI section')
+              } else {
+                console.log('MBTI section not found, trying alternative scroll')
+                window.scrollTo({ top: window.innerHeight, behavior: 'smooth' })
+              }
+            }}
+            className="group transition-transform hover:translate-y-1"
+            title="跳转到MBTI"
+          >
+            <svg 
+              className="w-8 h-8 text-foreground/60 hover:text-foreground transition-colors" 
+              fill="none" 
+              stroke="currentColor" 
+              strokeWidth="2"
+              viewBox="0 0 24 24"
+            >
+              <path d="M7 10l5 5 5-5" />
+            </svg>
+          </button>
+        </div>
+
       </div>
     </section>
   )

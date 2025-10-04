@@ -33,6 +33,9 @@ export default function BlogPage() {
                 </Link>
               ))}
             </div>
+            
+            {/* 添加空间让页面可以滚动 */}
+            <div className="h-96"></div>
           </div>
         </div>
       </main>
