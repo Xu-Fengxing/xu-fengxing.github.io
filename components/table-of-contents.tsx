@@ -84,21 +84,26 @@ export function TableOfContents({ content }: TableOfContentsProps) {
 
   return (
     <div className="sticky top-20 max-h-[calc(100vh-5rem)] overflow-y-auto">
-      <div className="bg-card border border-border rounded-lg p-4">
-        <h3 className="text-sm font-semibold text-foreground mb-3">目录</h3>
-        <nav className="space-y-1">
+      <div className="bg-card/50 backdrop-blur-sm border border-border/50 rounded-xl p-5 shadow-sm">
+        <h3 className="text-sm font-semibold text-foreground mb-4 flex items-center gap-2">
+          <svg className="w-4 h-4 text-accent" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+          </svg>
+          目录
+        </h3>
+        <nav className="space-y-2">
           {tocItems.map((item) => (
             <button
               key={item.id}
               onClick={() => scrollToHeading(item.id)}
-              className={`block w-full text-left text-sm transition-colors hover:text-accent ${
+              className={`block w-full text-left text-sm transition-all duration-200 hover:text-accent hover:bg-accent/5 rounded-md px-2 py-1.5 ${
                 activeId === item.id
-                  ? 'text-accent font-medium'
-                  : 'text-muted-foreground'
+                  ? 'text-accent font-medium bg-accent/10'
+                  : 'text-muted-foreground hover:text-foreground'
               } ${
-                item.level === 2 ? 'pl-0' :
+                item.level === 2 ? 'pl-0 font-medium' :
                 item.level === 3 ? 'pl-3' :
-                item.level === 4 ? 'pl-6' : 'pl-0'
+                item.level === 4 ? 'pl-6 text-xs' : 'pl-0'
               }`}
             >
               {item.text}

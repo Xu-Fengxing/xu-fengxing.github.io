@@ -39,10 +39,10 @@ export default function BlogPostPage({ params }: { params: { id: string } }) {
     <div className="flex min-h-screen">
       <Sidebar />
       <main id="top" className="flex-1 lg:ml-64">
-        <div className="max-w-6xl mx-auto px-6 py-20">
-          <div className="flex gap-8">
+        <div className="max-w-7xl mx-auto px-6 py-20">
+          <div className="flex gap-12">
             {/* 文章内容区域 */}
-            <div className="flex-1 max-w-4xl">
+            <div className="flex-1 max-w-4xl ml-8">
           <Link
             href="/blog"
             className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-8"
@@ -153,7 +153,7 @@ export default function BlogPostPage({ params }: { params: { id: string } }) {
             </div>
             
             {/* 目录区域 */}
-            <div className="hidden lg:block w-64 flex-shrink-0">
+            <div className="hidden lg:block w-72 flex-shrink-0">
               <TableOfContents content={post.content} />
             </div>
           </div>
