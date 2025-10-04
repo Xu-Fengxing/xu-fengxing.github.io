@@ -147,24 +147,50 @@ export function TableOfContents({ content }: TableOfContentsProps) {
             ></div>
           </div>
         </div>
-        <nav className="space-y-1">
-          {tocItems.map((item) => (
-            <button
-              key={item.id}
-              onClick={() => scrollToHeading(item.id)}
-              className={`block w-full text-left text-sm transition-all duration-200 hover:text-accent hover:bg-accent/5 rounded-lg px-3 py-2 ${
-                activeIds.includes(item.id)
-                  ? 'text-accent font-medium bg-accent/10'
-                  : 'text-muted-foreground hover:text-foreground'
-              } ${
-                item.level === 2 ? 'pl-0 font-medium' :
-                item.level === 3 ? 'pl-4' :
-                item.level === 4 ? 'pl-8' : 'pl-0'
-              }`}
-            >
-              {item.text}
-            </button>
-          ))}
+        <nav className="space-y-0">
+          {tocItems.map((item, index) => {
+            const isActive = activeIds.includes(item.id)
+            const prevItem = index > 0 ? tocItems[index - 1] : null
+            const nextItem = index < tocItems.length - 1 ? tocItems[index + 1] : null
+            const prevActive = prevItem ? activeIds.includes(prevItem.id) : false
+            const nextActive = nextItem ? activeIds.includes(nextItem.id) : false
+            
+            // 确定圆角样式
+            let roundedClass = ''
+            if (isActive) {
+              if (!prevActive && !nextActive) {
+                // 单独高亮
+                roundedClass = 'rounded-lg'
+              } else if (!prevActive && nextActive) {
+                // 开始连续高亮
+                roundedClass = 'rounded-t-lg'
+              } else if (prevActive && !nextActive) {
+                // 结束连续高亮
+                roundedClass = 'rounded-b-lg'
+              } else {
+                // 中间连续高亮
+                roundedClass = ''
+              }
+            }
+            
+            return (
+              <button
+                key={item.id}
+                onClick={() => scrollToHeading(item.id)}
+                className={`block w-full text-left text-sm transition-all duration-200 hover:text-accent hover:bg-accent/5 px-3 py-2 ${
+                  isActive
+                    ? 'text-accent font-medium bg-accent/10'
+                    : 'text-muted-foreground hover:text-foreground'
+                } ${
+                  item.level === 2 ? 'pl-0 font-medium' :
+                  item.level === 3 ? 'pl-4' :
+                  item.level === 4 ? 'pl-8' : 'pl-0'
+                } ${roundedClass}`}
+              >
+                {item.text}
+              </button>
+            )
+          })}
         </nav>
       </div>
     </div>

@@ -23,7 +23,7 @@ export default function FriendsPage() {
     {
       name: "张洪Heo",
       url: "https://blog.zhheo.com/",
-      description: "分享设计与科技生活 - 产品、交互、设计、开发",
+      description: "张洪Heo - 分享设计与科技生活",
       avatar: "https://blog.zhheo.com/avatar.jpg",
       tags: ["设计", "开发", "产品", "教程"],
       icon: "fa-solid fa-palette"

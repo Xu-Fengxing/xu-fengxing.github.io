@@ -54,7 +54,7 @@ export default function NotFound() {
               <div className="mt-8">
                 <Link
                   href="/"
-                  className="inline-flex items-center gap-2 px-8 py-4 bg-accent text-accent-foreground rounded-2xl hover:bg-accent/90 transition-colors font-medium shadow-lg hover:shadow-xl"
+                  className="inline-flex items-center gap-2 px-8 py-4 bg-accent text-accent-foreground rounded-3xl hover:bg-accent/90 transition-colors font-medium shadow-lg hover:shadow-xl"
                 >
                   <Home className="w-4 h-4" />
                   返回首页
