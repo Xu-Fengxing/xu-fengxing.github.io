@@ -10,7 +10,7 @@ export function Footer() {
           <div className="space-y-4">
             <h3 className="text-sm font-semibold uppercase tracking-wide">关于</h3>
             <p className="text-sm text-muted-foreground leading-relaxed">
-              一个专注于设计与开发的个人博客，分享创作灵感与技术实践。
+              风行Justin的个人空间，专注于设计与开发，分享创作灵感与技术实践。
             </p>
           </div>
 
@@ -72,7 +72,7 @@ export function Footer() {
 
         <div className="mt-12 pt-8 border-t border-border/40">
           <div className="flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-muted-foreground">
-            <p>© 2025 设计师博客. 保留所有权利.</p>
+            <p>© 2025 风行Justin. 保留所有权利.</p>
             <p className="font-mono text-xs">用心设计 · 用爱编码</p>
           </div>
         </div>

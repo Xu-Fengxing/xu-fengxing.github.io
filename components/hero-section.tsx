@@ -5,17 +5,17 @@ export function HeroSection() {
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">
           <div className="space-y-6">
             <div className="inline-block">
-              <span className="text-primary text-sm font-medium tracking-wide uppercase">Designer's Blog</span>
+              <span className="text-primary text-sm font-medium tracking-wide uppercase">个人空间</span>
             </div>
 
             <h1 className="text-5xl lg:text-7xl font-bold tracking-tight text-balance leading-[1.1]">
-              主用极简的视角，
+              风行Justin，
               <br />
-              <span className="text-primary">记录设计与思考</span>
+              <span className="text-primary">个人空间</span>
             </h1>
 
             <p className="text-lg text-muted-foreground leading-relaxed max-w-xl text-pretty">
-              探索设计的本质，分享创作的灵感。在这里记录关于用户体验、 视觉设计和前端开发的思考与实践。
+              欢迎来到我的个人空间！这里记录着我的设计思考、技术实践和生活感悟。用极简的视角，分享创作的灵感。
             </p>
 
             <div className="flex items-center gap-4 pt-4">
@@ -26,51 +26,14 @@ export function HeroSection() {
 
           <div className="relative hidden lg:flex items-center justify-center">
             <div className="relative w-full max-w-md aspect-square">
-              <svg viewBox="0 0 400 400" className="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
-                {/* Easel stand */}
-                <path
-                  d="M120 350 L120 150 M280 350 L280 150 M200 380 L200 150"
-                  stroke="currentColor"
-                  strokeWidth="3"
-                  strokeLinecap="round"
-                  className="text-foreground"
+              <div className="w-full h-full rounded-full overflow-hidden border-4 border-primary/20 shadow-2xl">
+                <img 
+                  src="/avatar.jpg" 
+                  alt="风行Justin头像" 
+                  className="w-full h-full object-cover"
                 />
-
-                {/* Canvas frame */}
-                <rect
-                  x="80"
-                  y="80"
-                  width="240"
-                  height="180"
-                  stroke="currentColor"
-                  strokeWidth="3"
-                  fill="none"
-                  className="text-foreground"
-                  rx="4"
-                />
-
-                {/* Pencil */}
-                <g transform="translate(260, 120) rotate(45)">
-                  <rect x="0" y="0" width="12" height="80" fill="currentColor" className="text-foreground" rx="2" />
-                  <path d="M 6 80 L 0 95 L 12 95 Z" fill="currentColor" className="text-foreground" />
-                </g>
-
-                {/* Blue accent dot */}
-                <circle cx="200" cy="170" r="16" fill="currentColor" className="text-primary" />
-
-                {/* Top holder */}
-                <rect
-                  x="180"
-                  y="60"
-                  width="40"
-                  height="20"
-                  stroke="currentColor"
-                  strokeWidth="3"
-                  fill="none"
-                  className="text-foreground"
-                  rx="2"
-                />
-              </svg>
+              </div>
+              <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-primary/10 rounded-full blur-xl"></div>
             </div>
           </div>
         </div>

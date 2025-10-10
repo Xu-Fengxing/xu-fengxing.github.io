@@ -41,6 +41,17 @@ export function Sidebar() {
 
       <div className="mt-auto pt-6">
         <div className="rounded-lg bg-card p-4 border border-border">
+          <div className="flex items-center gap-3 mb-3">
+            <img 
+              src="/avatar.jpg" 
+              alt="风行Justin" 
+              className="w-10 h-10 rounded-full object-cover border border-border"
+            />
+            <div>
+              <p className="text-sm font-medium">风行Justin</p>
+              <p className="text-xs text-muted-foreground">设计师 & 开发者</p>
+            </div>
+          </div>
           <p className="text-xs text-muted-foreground leading-relaxed">用极简的视角，记录设计与思考</p>
         </div>
       </div>

@@ -7,7 +7,7 @@ export function Header() {
       <div className="flex h-14 items-center justify-between px-6">
         <div className="flex items-center gap-2">
           <Apple className="h-6 w-6" />
-          <span className="text-lg font-semibold tracking-tight">博客</span>
+          <span className="text-lg font-semibold tracking-tight">风行Justin</span>
         </div>
 
         <nav className="hidden md:flex items-center gap-8 text-sm">
