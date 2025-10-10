@@ -26,14 +26,51 @@ export function HeroSection() {
 
           <div className="relative hidden lg:flex items-center justify-center">
             <div className="relative w-full max-w-md aspect-square">
-              <div className="w-full h-full rounded-full overflow-hidden border-4 border-primary/20 shadow-2xl">
-                <img 
-                  src="/avatar.jpg" 
-                  alt="风行Justin头像" 
-                  className="w-full h-full object-cover"
+              <svg viewBox="0 0 400 400" className="w-full h-full" fill="none" xmlns="http://www.w3.org/2000/svg">
+                {/* Easel stand */}
+                <path
+                  d="M120 350 L120 150 M280 350 L280 150 M200 380 L200 150"
+                  stroke="currentColor"
+                  strokeWidth="3"
+                  strokeLinecap="round"
+                  className="text-foreground"
                 />
-              </div>
-              <div className="absolute -bottom-4 -right-4 w-24 h-24 bg-primary/10 rounded-full blur-xl"></div>
+
+                {/* Canvas frame */}
+                <rect
+                  x="80"
+                  y="80"
+                  width="240"
+                  height="180"
+                  stroke="currentColor"
+                  strokeWidth="3"
+                  fill="none"
+                  className="text-foreground"
+                  rx="4"
+                />
+
+                {/* Pencil */}
+                <g transform="translate(260, 120) rotate(45)">
+                  <rect x="0" y="0" width="12" height="80" fill="currentColor" className="text-foreground" rx="2" />
+                  <path d="M 6 80 L 0 95 L 12 95 Z" fill="currentColor" className="text-foreground" />
+                </g>
+
+                {/* Blue accent dot */}
+                <circle cx="200" cy="170" r="16" fill="currentColor" className="text-primary" />
+
+                {/* Top holder */}
+                <rect
+                  x="180"
+                  y="60"
+                  width="40"
+                  height="20"
+                  stroke="currentColor"
+                  strokeWidth="3"
+                  fill="none"
+                  className="text-foreground"
+                  rx="2"
+                />
+              </svg>
             </div>
           </div>
         </div>
