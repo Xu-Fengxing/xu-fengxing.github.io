@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { Sidebar } from "@/components/sidebar"
 import { ChevronDown } from "lucide-react"
-import { articles } from "@/lib/articles"
+import { articles, generateArticleHash } from "@/lib/articles"
 
 export default function BlogContent() {
   const router = useRouter()

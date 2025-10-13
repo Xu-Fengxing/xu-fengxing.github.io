@@ -9,10 +9,11 @@ export async function generateStaticParams() {
   }))
 }
 
-export default function ArticlePage({ params }: { params: { id: string } }) {
+export default async function ArticlePage({ params }: { params: Promise<{ id: string }> }) {
+  const { id } = await params
   return (
     <Suspense fallback={<div>加载中...</div>}>
-      <ArticleContent articleId={params.id} />
+      <ArticleContent articleId={id} />
     </Suspense>
   )
 }

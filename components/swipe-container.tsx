@@ -43,16 +43,18 @@ export function SwipeContainer() {
   }, [])
 
   const onTouchStart = (e: React.TouchEvent) => {
+    if (!isMounted) return
     setTouchEnd(null)
     setTouchStart(e.targetTouches[0].clientY)
   }
 
   const onTouchMove = (e: React.TouchEvent) => {
+    if (!isMounted) return
     setTouchEnd(e.targetTouches[0].clientY)
   }
 
   const onTouchEnd = () => {
-    if (!touchStart || !touchEnd) return
+    if (!isMounted || !touchStart || !touchEnd) return
     
     const distance = touchStart - touchEnd
     const isUpSwipe = distance > minSwipeDistance
@@ -121,10 +123,7 @@ export function SwipeContainer() {
   return (
     <div
       ref={containerRef}
-      className={cn(
-        "relative overflow-hidden h-screen",
-        !isMounted && "pointer-events-none"
-      )}
+      className="relative overflow-hidden h-screen"
       style={{ 
         overscrollBehavior: 'none',
         willChange: 'transform',
@@ -137,8 +136,8 @@ export function SwipeContainer() {
       <div
         className={`absolute inset-0 transition-all duration-500 smooth-transition ${
           currentModule === 'hero' 
-            ? 'translate-x-0 translate-y-0 opacity-100' 
-            : '-translate-x-4 -translate-y-4 opacity-0'
+            ? 'translate-x-0 translate-y-0 opacity-100 pointer-events-auto' 
+            : '-translate-x-4 -translate-y-4 opacity-0 pointer-events-none'
         }`}
         style={{ willChange: 'transform, opacity' }}
       >
@@ -148,8 +147,8 @@ export function SwipeContainer() {
       <div
         className={`absolute inset-0 transition-all duration-500 smooth-transition ${
           currentModule === 'content' 
-            ? 'translate-x-0 translate-y-0 opacity-100' 
-            : '-translate-x-4 translate-y-4 opacity-0'
+            ? 'translate-x-0 translate-y-0 opacity-100 pointer-events-auto' 
+            : '-translate-x-4 translate-y-4 opacity-0 pointer-events-none'
         }`}
         style={{ willChange: 'transform, opacity' }}
       >
