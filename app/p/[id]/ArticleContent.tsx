@@ -3,7 +3,7 @@
 import { useRouter, useSearchParams } from "next/navigation"
 import { useState, useEffect, useRef } from "react"
 import { Sidebar } from "@/components/sidebar"
-import { articles, generateArticleHash } from "@/lib/articles"
+import { getArticleById, generateArticleHash } from "@/lib/articles"
 
 interface ArticleContentProps {
   articleId: string
@@ -14,26 +14,30 @@ export default function ArticleContent({ articleId }: ArticleContentProps) {
   const searchParams = useSearchParams()
   const [readingProgress, setReadingProgress] = useState(0)
   const [activeHeadings, setActiveHeadings] = useState<string[]>([])
+  const [article, setArticle] = useState<any>(null)
+  const [loading, setLoading] = useState(true)
   const tocContainerRef = useRef<HTMLDivElement>(null)
 
-  // 根据ID获取文章内容
-  const getArticleContent = (id: string) => {
-    // 遍历所有文章，找到匹配的文章
-    for (const article of articles) {
-      const articleHash = generateArticleHash(article.title)
-      if (id === articleHash) {
-        return article
+  // 加载文章数据
+  useEffect(() => {
+    const loadArticle = async () => {
+      try {
+        const articleData = await getArticleById(articleId)
+        setArticle(articleData)
+        setLoading(false)
+      } catch (error) {
+        console.error('Error loading article:', error)
+        setLoading(false)
       }
     }
-    return null
-  }
+    
+    loadArticle()
+  }, [articleId])
 
   // 渲染内联Markdown（移除粗体标记）
   const renderInlineMarkdown = (text: string) => {
     return text.replace(/\*\*(.*?)\*\*/g, '$1')
   }
-
-  const article = getArticleContent(articleId)
 
   // 阅读进度计算和标题高亮
   useEffect(() => {
@@ -145,6 +149,26 @@ export default function ArticleContent({ articleId }: ArticleContentProps) {
     }
   }
 
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background">
+        <div className="flex">
+          <Sidebar />
+          <div className="flex-1 lg:ml-64">
+            <main className="px-6 lg:px-12 py-16 h-full flex flex-col justify-center">
+              <div className="max-w-6xl mx-auto w-full">
+                <div className="text-center">
+                  <h1 className="text-3xl font-bold text-foreground mb-6">加载中...</h1>
+                  <p className="text-muted-foreground">正在加载文章内容...</p>
+                </div>
+              </div>
+            </main>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
   if (!article) {
     return (
       <div className="min-h-screen bg-background">
@@ -225,46 +249,92 @@ export default function ArticleContent({ articleId }: ArticleContentProps) {
                 <div className="flex-1">
                   <div className="bg-card border border-border rounded-lg px-8 pt-2 pb-3">
                   <div className="prose prose-invert max-w-none text-[15px]">
-                    {article.content.split('\n').map((line, index, array) => {
-                      if (line.startsWith('# ')) {
-                        return <h1 key={index} id={`heading-${index}`} className="text-2xl font-bold text-foreground mb-4 mt-6">{line.substring(2)}</h1>
-                      } else if (line.startsWith('## ')) {
-                        return <h2 key={index} id={`heading-${index}`} className="text-xl font-semibold text-foreground mb-5 mt-6">{line.substring(3)}</h2>
-                      } else if (line.startsWith('### ')) {
-                        return <h3 key={index} id={`heading-${index}`} className="text-lg font-medium text-foreground mb-4 mt-5">{line.substring(4)}</h3>
-                      } else if (line.startsWith('- ')) {
-                        // 检查下一行是否是列表项，如果不是则增加下边距
-                        const nextLine = array[index + 1]
-                        const isNextLineListItem = nextLine && (nextLine.startsWith('- ') || /^\d+\.\s/.test(nextLine))
-                        return <li key={index} className={`text-foreground ml-8 ${isNextLineListItem ? 'mb-1' : 'mb-3'}`}>{renderInlineMarkdown(line.substring(2))}</li>
-                      } else if (/^\d+\.\s/.test(line)) {
-                        const content = line.replace(/^\d+\.\s/, '')
-                        // 检查下一行是否是列表项，如果不是则增加下边距
-                        const nextLine = array[index + 1]
-                        const isNextLineListItem = nextLine && (nextLine.startsWith('- ') || /^\d+\.\s/.test(nextLine))
-                        return <li key={index} className={`text-foreground ml-8 ${isNextLineListItem ? 'mb-1' : 'mb-3'}`}>{renderInlineMarkdown(content)}</li>
-                      } else if (line.includes('`') && line.includes('`')) {
-                        const parts = line.split('`')
-                        return (
-                          <p key={index} className="text-foreground mb-3 pl-4">
-                            {parts.map((part, partIndex) => 
-                              partIndex % 2 === 1 ? (
-                                <code key={partIndex} className="bg-muted px-1 py-0.5 rounded text-sm font-mono">{part}</code>
-                              ) : (
-                                part
-                              )
-                            )}
-                          </p>
-                        )
-                      } else if (line.trim() === '') {
-                        return <br key={index} />
-                      } else {
-                        // 检查下一行是否是标题，如果是则增加底部间距
-                        const nextLine = array[index + 1]
-                        const isNextLineTitle = nextLine && (nextLine.startsWith('# ') || nextLine.startsWith('## ') || nextLine.startsWith('### '))
-                        return <p key={index} className={`text-foreground pl-4 ${isNextLineTitle ? 'mb-4' : 'mb-3'}`}>{renderInlineMarkdown(line)}</p>
+                    {(() => {
+                      const lines = article.content.split('\n')
+                      const elements: JSX.Element[] = []
+                      let i = 0
+                      let codeBlockIndex = 0
+
+                      while (i < lines.length) {
+                        const line = lines[i]
+                        
+                        // 处理代码块开始
+                        if (line.trim().startsWith('```')) {
+                          const language = line.trim().replace('```', '').trim()
+                          const codeLines: string[] = []
+                          i++ // 跳过开始行
+                          
+                          // 收集代码行直到遇到结束标记
+                          while (i < lines.length && !lines[i].trim().startsWith('```')) {
+                            codeLines.push(lines[i])
+                            i++
+                          }
+                          
+                          // 创建代码块元素
+                          elements.push(
+                            <div key={`code-${codeBlockIndex}`} className="my-6">
+                              <div className="bg-muted/50 rounded-t-lg px-4 py-2 text-sm text-muted-foreground border-b border-border">
+                                {language || 'code'}
+                              </div>
+                              <pre className="bg-muted/30 rounded-b-lg p-4 overflow-x-auto border border-border">
+                                <code className="text-sm font-mono text-foreground">
+                                  {codeLines.join('\n')}
+                                </code>
+                              </pre>
+                            </div>
+                          )
+                          codeBlockIndex++
+                          i++ // 跳过结束行
+                          continue
+                        }
+                        
+                        // 处理标题
+                        if (line.startsWith('# ')) {
+                          elements.push(<h1 key={i} id={`heading-${i}`} className="text-2xl font-bold text-foreground mb-4 mt-6">{line.substring(2)}</h1>)
+                        } else if (line.startsWith('## ')) {
+                          elements.push(<h2 key={i} id={`heading-${i}`} className="text-xl font-semibold text-foreground mb-5 mt-6">{line.substring(3)}</h2>)
+                        } else if (line.startsWith('### ')) {
+                          elements.push(<h3 key={i} id={`heading-${i}`} className="text-lg font-medium text-foreground mb-4 mt-5">{line.substring(4)}</h3>)
+                        } else if (line.startsWith('#### ')) {
+                          elements.push(<h4 key={i} id={`heading-${i}`} className="text-base font-medium text-foreground mb-3 mt-4">{line.substring(5)}</h4>)
+                        } else if (line.startsWith('- ')) {
+                          // 检查下一行是否是列表项，如果不是则增加下边距
+                          const nextLine = lines[i + 1]
+                          const isNextLineListItem = nextLine && (nextLine.startsWith('- ') || /^\d+\.\s/.test(nextLine))
+                          elements.push(<li key={i} className={`text-foreground ml-8 ${isNextLineListItem ? 'mb-1' : 'mb-3'}`}>{renderInlineMarkdown(line.substring(2))}</li>)
+                        } else if (/^\d+\.\s/.test(line)) {
+                          const content = line.replace(/^\d+\.\s/, '')
+                          // 检查下一行是否是列表项，如果不是则增加下边距
+                          const nextLine = lines[i + 1]
+                          const isNextLineListItem = nextLine && (nextLine.startsWith('- ') || /^\d+\.\s/.test(nextLine))
+                          elements.push(<li key={i} className={`text-foreground ml-8 ${isNextLineListItem ? 'mb-1' : 'mb-3'}`}>{renderInlineMarkdown(content)}</li>)
+                        } else if (line.includes('`') && line.includes('`')) {
+                          const parts = line.split('`')
+                          elements.push(
+                            <p key={i} className="text-foreground mb-3 pl-4">
+                              {parts.map((part, partIndex) => 
+                                partIndex % 2 === 1 ? (
+                                  <code key={partIndex} className="bg-muted px-1 py-0.5 rounded text-sm font-mono">{part}</code>
+                                ) : (
+                                  part
+                                )
+                              )}
+                            </p>
+                          )
+                        } else if (line.trim() === '') {
+                          elements.push(<br key={i} />)
+                        } else {
+                          // 检查下一行是否是标题，如果是则增加底部间距
+                          const nextLine = lines[i + 1]
+                          const isNextLineTitle = nextLine && (nextLine.startsWith('# ') || nextLine.startsWith('## ') || nextLine.startsWith('### '))
+                          elements.push(<p key={i} className={`text-foreground pl-4 ${isNextLineTitle ? 'mb-4' : 'mb-3'}`}>{renderInlineMarkdown(line)}</p>)
+                        }
+                        
+                        i++
                       }
-                    })}
+                      
+                      return elements
+                    })()}
                   </div>
                   </div>
                 </div>
@@ -364,4 +434,5 @@ export default function ArticleContent({ articleId }: ArticleContentProps) {
     </div>
   )
 }
+
 

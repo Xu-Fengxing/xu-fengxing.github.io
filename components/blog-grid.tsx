@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { Card } from "@/components/ui/card"
 import { ChevronDown, Calendar, Clock } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -15,12 +15,27 @@ type PlaceholderItem = {
 
 type DisplayItem = BlogPost | PlaceholderItem
 
-// 自动获取最新文章
-const blogPosts: BlogPost[] = getLatestArticles()
-
 export function BlogGrid() {
   const router = useRouter()
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([])
+  const [loading, setLoading] = useState(true)
+
+  // 加载文章数据
+  useEffect(() => {
+    const loadArticles = async () => {
+      try {
+        const articles = await getLatestArticles()
+        setBlogPosts(articles)
+        setLoading(false)
+      } catch (error) {
+        console.error('Error loading articles:', error)
+        setLoading(false)
+      }
+    }
+    
+    loadArticles()
+  }, [])
 
   // 生成文章链接的哈希值（与博客页面保持一致）
   const generateArticleHash = (title: string) => {
@@ -76,6 +91,9 @@ export function BlogGrid() {
 
   // 确保始终显示6个位置（文章 + 占位符）
   const displayItems: DisplayItem[] = (() => {
+    if (loading) {
+      return createPlaceholders(6) // 加载时显示6个占位符
+    }
     const items = [...filteredPosts]
     const placeholdersNeeded = Math.max(0, 6 - items.length)
     const result = [...items, ...createPlaceholders(placeholdersNeeded)]

@@ -8,9 +8,6 @@ export const metadata: Metadata = {
   title: '风行Justin - 个人空间',
   description: '个人博客与设计思考空间',
   generator: 'v0.app',
-  icons: {
-    icon: '/favicon.ico',
-  },
 }
 
 export default function RootLayout({

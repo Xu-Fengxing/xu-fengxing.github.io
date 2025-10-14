@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { Sidebar } from "@/components/sidebar"
 import { ChevronDown } from "lucide-react"
-import { articles, generateArticleHash } from "@/lib/articles"
+import { getAllArticles, generateArticleHash, getArticleStats } from "@/lib/articles"
 
 export default function BlogContent() {
   const router = useRouter()
@@ -13,6 +13,29 @@ export default function BlogContent() {
   const [showAllTags, setShowAllTags] = useState(false)
   const [searchQuery, setSearchQuery] = useState("")
   const [selectedYear, setSelectedYear] = useState<number | null>(null)
+  const [articles, setArticles] = useState<any[]>([])
+  const [stats, setStats] = useState<{ categories: Array<{ name: string; count: number }> }>({ categories: [] })
+  const [loading, setLoading] = useState(true)
+
+  // 加载文章数据
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const [articlesData, statsData] = await Promise.all([
+          getAllArticles(),
+          getArticleStats()
+        ])
+        setArticles(articlesData)
+        setStats(statsData)
+        setLoading(false)
+      } catch (error) {
+        console.error('Error loading data:', error)
+        setLoading(false)
+      }
+    }
+    
+    loadData()
+  }, [])
 
   // 从URL参数中获取筛选条件
   useEffect(() => {
@@ -166,16 +189,8 @@ export default function BlogContent() {
     router.push(newUrl)
   }
 
-  // 自动生成分类统计
-  const allTags = [
-    "科技", "人文", "社会", "经济", "政治", "教育", "艺术", "体育", 
-    "健康", "环境", "历史", "哲学", "心理学", "法律", "军事", 
-    "娱乐", "旅游", "美食", "时尚", "建筑", "音乐", "文学", "电影", "其他"
-  ].map(category => ({
-    name: category,
-    count: articles.filter(article => article.category === category).length
-  }))
-
+  // 使用新的统计系统
+  const allTags = stats.categories
   const displayedTags = showAllTags ? allTags : allTags.slice(0, 9)
 
   // 根据选中的分类/标签、年份和搜索查询筛选文章
@@ -196,11 +211,31 @@ export default function BlogContent() {
     const searchMatch = !searchQuery.trim() || 
       article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       article.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      article.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      article.tags.some((tag: string) => tag.toLowerCase().includes(searchQuery.toLowerCase())) ||
       (article.content && article.content.toLowerCase().includes(searchQuery.toLowerCase()))
     
     return filterMatch && yearMatch && searchMatch
   })
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-background">
+        <div className="flex">
+          <Sidebar />
+          <div className="flex-1 lg:ml-64">
+            <main className="px-6 lg:px-12 py-16 h-full flex flex-col justify-center">
+              <div className="max-w-6xl mx-auto w-full">
+                <div className="text-center">
+                  <h1 className="text-3xl font-bold text-foreground mb-6">博客</h1>
+                  <p className="text-muted-foreground">加载中...</p>
+                </div>
+              </div>
+            </main>
+          </div>
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="min-h-screen bg-background">
@@ -227,7 +262,7 @@ export default function BlogContent() {
                       const isContentMatch = searchQuery.trim() && article.content && 
                         article.content.toLowerCase().includes(searchQuery.toLowerCase()) &&
                         !article.title.toLowerCase().includes(searchQuery.toLowerCase()) &&
-                        !article.tags.some(tag => tag.toLowerCase().includes(searchQuery.toLowerCase()))
+                        !article.tags.some((tag: string) => tag.toLowerCase().includes(searchQuery.toLowerCase()))
                       
                       return (
                         <article key={article.id} className="group cursor-pointer">
@@ -272,7 +307,7 @@ export default function BlogContent() {
                                     {highlightSearchTerm(article.category, searchQuery)}
                                   </span>
                                   <div className="flex gap-2 ml-2">
-                                    {article.tags.map((tag, index) => (
+                                    {article.tags.map((tag: string, index: number) => (
                                       <span 
                                         key={index}
                                         onClick={(e) => {
@@ -384,7 +419,7 @@ export default function BlogContent() {
                   <div className="bg-card border border-border rounded-lg p-4 pr-6">
                     <h3 className="text-lg font-semibold mb-4 ml-1">最新文章</h3>
                     <div className="space-y-3 ml-1">
-                      {articles.slice(0, 5).map((article, index) => (
+                      {articles.slice(0, 5).map((article: any, index: number) => (
                         <div key={index} className="group cursor-pointer" onClick={() => handleArticleClick(article)}>
                           <h4 className="text-sm font-medium group-hover:text-primary transition-colors line-clamp-1">
                             {article.title}
@@ -424,7 +459,7 @@ export default function BlogContent() {
                             >
                               <span className="text-sm">{year}年</span>
                               <span className="text-xs text-muted-foreground">
-                                {yearArticles.length}
+                                {(yearArticles as any[]).length}
                               </span>
                             </div>
                           )

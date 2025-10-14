@@ -1,12 +1,12 @@
 export function HeroSection() {
   return (
     <section className="relative py-12 lg:py-16 overflow-hidden">
-      <div className="px-12 lg:px-24">
+      <div className="px-6 sm:px-8 md:px-12 lg:px-24">
         <div className="max-w-7xl mx-auto">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
+          <div className="grid xl:grid-cols-2 gap-8 xl:gap-12 items-center">
             {/* 左侧文字内容 */}
-            <div className="max-w-3xl">
-              <div className="space-y-6">
+            <div className="w-full xl:max-w-3xl">
+              <div className="space-y-3 md:space-y-4 lg:space-y-6">
                 <div className="inline-flex items-center gap-2 pl-1.5">
                   <div className="relative">
                     <div className="w-2 h-2 bg-primary rounded-full animate-pulse" />
@@ -15,20 +15,19 @@ export function HeroSection() {
                   <span className="text-sm font-medium tracking-wide uppercase text-foreground">Justin&apos;s Blog</span>
                 </div>
 
-                <h1 className="text-4xl lg:text-6xl font-bold tracking-tight text-balance leading-[1.3] text-left">
-                  从想法到行动
-                  <br />
-                  <span className="text-primary">让每一步都更清晰</span>
+                <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold tracking-tight text-balance leading-[1.2] md:leading-[1.3] text-left">
+                  <span className="block">从想法到行动</span>
+                  <span className="block text-primary">让每一步都更清晰</span>
                 </h1>
 
-                <p className="text-lg text-muted-foreground leading-relaxed max-w-xl text-pretty text-left">
+                <p className="text-base md:text-lg text-muted-foreground leading-relaxed w-full max-w-[50vw] text-pretty text-left">
                   在这里，整理思路、记录尝试，把每一次探索和实践都化为成长的轨迹，让进步清晰可见。
                 </p>
               </div>
             </div>
 
             {/* 右侧Windows窗口 */}
-            <div className="hidden lg:block relative">
+            <div className="hidden xl:block relative">
               <div 
                 className="bg-card border border-border rounded-lg shadow-2xl overflow-hidden"
                 style={{
