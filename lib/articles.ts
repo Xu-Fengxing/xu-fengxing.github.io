@@ -1,16 +1,20 @@
-// 重新导出新的Markdown文章系统
-export * from './articles-md'
-
-// 为了保持向后兼容，提供旧的接口
-import { 
+// 在静态构建时，使用静态数据
+export { 
   getAllArticles, 
   getArticleById, 
   getBlogPosts, 
   getLatestArticles,
   generateArticleHash,
+  calculateReadTime,
+  getArticlesByCategory,
+  getArticlesByTag,
+  searchArticles,
+  getAllCategories,
+  getAllTags,
+  getArticleStats,
   type Article,
   type BlogPost
-} from './articles-md'
+} from './articles-static'
 
-// 兼容性导出
-export const articles = getAllArticles()
+// 为了保持向后兼容，提供空的articles数组
+export const articles: any[] = []

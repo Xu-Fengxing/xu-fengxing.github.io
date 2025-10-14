@@ -4,13 +4,10 @@ import ArticleContent from "./ArticleContent"
 // 生成静态参数供静态导出使用
 export async function generateStaticParams() {
   try {
-    // 在服务端获取文章列表
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/articles`)
-    if (!response.ok) {
-      return []
-    }
-    const articles = await response.json()
-    return articles.map((article: any) => ({
+    // 直接导入文章数据（静态构建时）
+    const { getAllArticles } = await import('@/lib/articles')
+    const articles = await getAllArticles()
+    return articles.map((article) => ({
       id: article.id,
     }))
   } catch (error) {

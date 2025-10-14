@@ -1,7 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // 移除静态导出配置以支持API路由
-  // output: 'export',
+  output: 'export',
   basePath: '',
   eslint: {
     ignoreDuringBuilds: true,

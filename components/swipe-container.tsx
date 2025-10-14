@@ -3,7 +3,7 @@
 import { useState, useRef, useEffect, useCallback } from "react"
 import { useSearchParams } from "next/navigation"
 import { HeroModule } from "@/components/hero-module"
-import { HomeContentModule } from "@/components/home-content-module"
+import HomeContentModuleWrapper from "./home-content-module-wrapper"
 import { cn } from "@/lib/utils"
 
 export function SwipeContainer() {
@@ -152,7 +152,7 @@ export function SwipeContainer() {
         }`}
         style={{ willChange: 'transform, opacity' }}
       >
-        <HomeContentModule onScrollUp={handleScrollUp} />
+        <HomeContentModuleWrapper onScrollUp={handleScrollUp} />
       </div>
     </div>
   )
