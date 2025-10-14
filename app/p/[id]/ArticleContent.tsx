@@ -2,6 +2,7 @@ import { getArticleById } from '@/lib/articles'
 import { Sidebar } from '@/components/sidebar'
 import { notFound } from 'next/navigation'
 import CodeBlock from './CodeBlock'
+import TableOfContents from './TableOfContents'
 
 interface ArticleContentProps {
   articleId: string
@@ -178,40 +179,7 @@ export default async function ArticleContent({ articleId }: ArticleContentProps)
                 </div>
 
                 {/* 右侧目录 */}
-                <div className="w-80 space-y-4">
-                  <div className="bg-card border border-border rounded-lg p-4 sticky top-16 relative" style={{ maxHeight: 'calc(100vh - 106px)' }}>
-                    <h3 className="text-lg font-semibold mb-4 ml-1">目录</h3>
-                    <div 
-                      className="space-y-2 ml-1 overflow-y-auto scrollbar-hide pr-2" 
-                      style={{ maxHeight: 'calc(100vh - 206px)', paddingTop: '10px' }}
-                    >
-                      {article.content.split('\n').map((line, index) => {
-                        if (line.startsWith('## ')) {
-                          return (
-                            <a
-                              key={index}
-                              href={`#heading-${index}`}
-                              className="block text-sm text-muted-foreground hover:text-primary transition-colors py-1"
-                            >
-                              {line.substring(3)}
-                            </a>
-                          )
-                        } else if (line.startsWith('### ')) {
-                          return (
-                            <a
-                              key={index}
-                              href={`#heading-${index}`}
-                              className="block text-sm text-muted-foreground hover:text-primary transition-colors py-1 ml-4"
-                            >
-                              {line.substring(4)}
-                            </a>
-                          )
-                        }
-                        return null
-                      }).filter(Boolean)}
-                    </div>
-                  </div>
-                </div>
+                <TableOfContents content={article.content} />
               </div>
             </div>
           </main>
