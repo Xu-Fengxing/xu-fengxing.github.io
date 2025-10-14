@@ -15,7 +15,7 @@ const renderInlineMarkdown = (text: string) => {
     const parts = text.split('`')
     return parts.map((part, index) => 
       index % 2 === 1 ? (
-        <code key={index} className="bg-muted/30 px-1 py-0.5 rounded text-sm font-mono text-muted-foreground">{part}</code>
+        <code key={index} className="bg-muted/20 px-1 py-0.5 rounded text-sm font-mono text-muted-foreground">{part}</code>
       ) : (
         part
       )
@@ -201,7 +201,7 @@ export default async function ArticleContent({ articleId }: ArticleContentProps)
                             <p key={i} className="text-foreground mb-3 pl-4">
                               {parts.map((part, partIndex) => 
                                 partIndex % 2 === 1 ? (
-                                  <code key={partIndex} className="bg-muted/30 px-1 py-0.5 rounded text-sm font-mono text-muted-foreground">{part}</code>
+                                  <code key={partIndex} className="bg-muted/20 px-1 py-0.5 rounded text-sm font-mono text-muted-foreground">{part}</code>
                                 ) : (
                                   part
                                 )
