@@ -1,9 +1,9 @@
 ---
-title: "从硬编码到Markdown：构建现代博客系统"
+title: "Markdown博客系统实现"
 category: "科技"
-tags: ["Markdown", "博客", "开发", "Next.js"]
+tags: ["技术", "博客", "Markdown"]
 date: "2025年10月14日"
-excerpt: "如何将硬编码的文章系统改造为基于Markdown的灵活博客框架。"
+excerpt: "介绍如何将硬编码的文章系统改造为基于Markdown的灵活博客框架。"
 ---
 ## 为什么需要Markdown？
 传统的硬编码文章系统存在以下问题：
