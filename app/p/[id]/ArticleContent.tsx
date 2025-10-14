@@ -1,9 +1,7 @@
-"use client"
-
 import { getArticleById } from '@/lib/articles'
 import { Sidebar } from '@/components/sidebar'
-import { Copy, Check } from 'lucide-react'
-import { useState, useEffect } from 'react'
+import { notFound } from 'next/navigation'
+import CodeBlock from './CodeBlock'
 
 interface ArticleContentProps {
   articleId: string
@@ -26,83 +24,11 @@ const renderInlineMarkdown = (text: string) => {
   return text.replace(/\*\*(.*?)\*\*/g, '$1')
 }
 
-export default function ArticleContent({ articleId }: ArticleContentProps) {
-  const [article, setArticle] = useState<any>(null)
-  const [loading, setLoading] = useState(true)
-  const [copiedCodeBlocks, setCopiedCodeBlocks] = useState<Set<number>>(new Set())
-
-  useEffect(() => {
-    const loadArticle = async () => {
-      try {
-        const articleData = await getArticleById(articleId)
-        if (!articleData) {
-          setLoading(false)
-          return
-        }
-        setArticle(articleData)
-      } catch (error) {
-        console.error('Error loading article:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-    
-    loadArticle()
-  }, [articleId])
-
-  const copyToClipboard = async (text: string, codeBlockIndex: number) => {
-    try {
-      await navigator.clipboard.writeText(text)
-      setCopiedCodeBlocks(prev => new Set(prev).add(codeBlockIndex))
-      setTimeout(() => {
-        setCopiedCodeBlocks(prev => {
-          const newSet = new Set(prev)
-          newSet.delete(codeBlockIndex)
-          return newSet
-        })
-      }, 2000)
-    } catch (error) {
-      console.error('Failed to copy text:', error)
-    }
-  }
-
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-background">
-        <div className="flex">
-          <Sidebar />
-          <div className="flex-1 lg:ml-64">
-            <main className="px-6 lg:px-12 py-16 h-full flex flex-col justify-center">
-              <div className="max-w-6xl mx-auto w-full">
-                <div className="text-center">
-                  <p className="text-muted-foreground">加载中...</p>
-                </div>
-              </div>
-            </main>
-          </div>
-        </div>
-      </div>
-    )
-  }
+export default async function ArticleContent({ articleId }: ArticleContentProps) {
+  const article = await getArticleById(articleId)
 
   if (!article) {
-    return (
-      <div className="min-h-screen bg-background">
-        <div className="flex">
-          <Sidebar />
-          <div className="flex-1 lg:ml-64">
-            <main className="px-6 lg:px-12 py-16 h-full flex flex-col justify-center">
-              <div className="max-w-6xl mx-auto w-full">
-                <div className="text-center">
-                  <h1 className="text-3xl font-bold text-foreground mb-6">文章未找到</h1>
-                  <p className="text-muted-foreground">抱歉，找不到对应的文章内容。</p>
-                </div>
-              </div>
-            </main>
-          </div>
-        </div>
-      </div>
-    )
+    notFound()
   }
 
   return (
@@ -186,35 +112,14 @@ export default function ArticleContent({ articleId }: ArticleContentProps) {
                           
                           // 创建代码块元素
                           const codeContent = codeLines.join('\n')
-                          const isCopied = copiedCodeBlocks.has(codeBlockIndex)
                           
                           elements.push(
-                            <div key={`code-${codeBlockIndex}`} className="my-6">
-                              <div className="bg-muted/50 rounded-t-lg px-4 py-2 text-sm text-muted-foreground border-b border-border flex items-center justify-between">
-                                <span>{language || 'code'}</span>
-                                <button
-                                  onClick={() => copyToClipboard(codeContent, codeBlockIndex)}
-                                  className="flex items-center gap-1 text-xs text-muted-foreground hover:text-foreground transition-colors"
-                                >
-                                  {isCopied ? (
-                                    <>
-                                      <Check className="h-3 w-3" />
-                                      <span>已复制</span>
-                                    </>
-                                  ) : (
-                                    <>
-                                      <Copy className="h-3 w-3" />
-                                      <span>复制</span>
-                                    </>
-                                  )}
-                                </button>
-                              </div>
-                              <pre className="bg-muted/30 rounded-b-lg p-4 overflow-x-auto border border-border">
-                                <code className="text-sm font-mono text-foreground">
-                                  {codeContent}
-                                </code>
-                              </pre>
-                            </div>
+                            <CodeBlock
+                              key={`code-${codeBlockIndex}`}
+                              language={language || 'code'}
+                              code={codeContent}
+                              codeBlockIndex={codeBlockIndex}
+                            />
                           )
                           codeBlockIndex++
                           i++ // 跳过结束行
