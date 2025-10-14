@@ -137,16 +137,44 @@ export default async function ArticleContent({ articleId }: ArticleContentProps)
                         } else if (line.startsWith('#### ')) {
                           elements.push(<h4 key={i} id={`heading-${i}`} className="text-base font-medium text-foreground mb-3 mt-4">{line.substring(5)}</h4>)
                         } else if (line.startsWith('- ')) {
-                          // 检查下一行是否是列表项，如果不是则增加下边距
-                          const nextLine = lines[i + 1]
-                          const isNextLineListItem = nextLine && (nextLine.startsWith('- ') || /^\d+\.\s/.test(nextLine))
-                          elements.push(<li key={i} className={`text-foreground ml-8 ${isNextLineListItem ? 'mb-1' : 'mb-3'}`}>{renderInlineMarkdown(line.substring(2))}</li>)
+                          // 处理无序列表
+                          const listItems: JSX.Element[] = []
+                          while (i < lines.length && lines[i].startsWith('- ')) {
+                            const nextLine = lines[i + 1]
+                            const isNextLineListItem = nextLine && (nextLine.startsWith('- ') || /^\d+\.\s/.test(nextLine))
+                            listItems.push(
+                              <li key={i} className={`text-foreground ${isNextLineListItem ? 'mb-1' : 'mb-3'}`}>
+                                {renderInlineMarkdown(lines[i].substring(2))}
+                              </li>
+                            )
+                            i++
+                          }
+                          elements.push(
+                            <ul key={`ul-${i}`} className="list-disc list-inside mb-4 ml-4">
+                              {listItems}
+                            </ul>
+                          )
+                          continue
                         } else if (/^\d+\.\s/.test(line)) {
-                          const content = line.replace(/^\d+\.\s/, '')
-                          // 检查下一行是否是列表项，如果不是则增加下边距
-                          const nextLine = lines[i + 1]
-                          const isNextLineListItem = nextLine && (nextLine.startsWith('- ') || /^\d+\.\s/.test(nextLine))
-                          elements.push(<li key={i} className={`text-foreground ml-8 ${isNextLineListItem ? 'mb-1' : 'mb-3'}`}>{renderInlineMarkdown(content)}</li>)
+                          // 处理有序列表
+                          const listItems: JSX.Element[] = []
+                          while (i < lines.length && /^\d+\.\s/.test(lines[i])) {
+                            const content = lines[i].replace(/^\d+\.\s/, '')
+                            const nextLine = lines[i + 1]
+                            const isNextLineListItem = nextLine && (nextLine.startsWith('- ') || /^\d+\.\s/.test(nextLine))
+                            listItems.push(
+                              <li key={i} className={`text-foreground ${isNextLineListItem ? 'mb-1' : 'mb-3'}`}>
+                                {renderInlineMarkdown(content)}
+                              </li>
+                            )
+                            i++
+                          }
+                          elements.push(
+                            <ol key={`ol-${i}`} className="list-decimal list-inside mb-4 ml-4">
+                              {listItems}
+                            </ol>
+                          )
+                          continue
                         } else if (line.includes('`') && line.includes('`')) {
                           const parts = line.split('`')
                           elements.push(
