@@ -173,11 +173,11 @@ interface Article {
 \`\`\`
        ## 文件结构
        \`\`\`
-       content/
-         articles/
-           7w5i.md
-           tzh7.md
-         README.md
+content/
+  articles/
+    7w5i.md
+    tzh7.md
+  README.md
        \`\`\`
 ## 使用说明
 1. 在\`content/articles/\`目录下创建Markdown文件
