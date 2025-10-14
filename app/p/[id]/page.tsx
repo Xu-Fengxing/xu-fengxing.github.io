@@ -1,4 +1,3 @@
-import { Suspense } from "react"
 import ArticleContent from "./ArticleContent"
 
 // 生成静态参数供静态导出使用
@@ -18,9 +17,5 @@ export async function generateStaticParams() {
 
 export default async function ArticlePage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
-  return (
-    <Suspense fallback={<div>加载中...</div>}>
-      <ArticleContent articleId={id} />
-    </Suspense>
-  )
+  return <ArticleContent articleId={id} />
 }
