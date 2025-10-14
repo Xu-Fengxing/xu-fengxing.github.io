@@ -57,7 +57,7 @@ export const calculateReadTime = (content: string): string => {
 // 静态文章数据
 const staticArticles: Article[] = [
   {
-    id: "7w5i",
+    id: generateArticleHash("文章链接的生成原理"),
     title: "文章链接的生成原理",
     category: "科技",
     tags: ["技术", "算法", "哈希"],
@@ -132,10 +132,10 @@ for i = 0 to 3:  // 生成4位代码
 2. **简洁性**：链接很短，只有4个字符
 3. **友好性**：只包含字母和数字，适合在网址中使用
 4. **一致性**：相同的标题总是生成相同的链接`,
-    slug: "7w5i"
+    slug: generateArticleHash("文章链接的生成原理")
   },
   {
-    id: "tzh7",
+    id: generateArticleHash("Markdown博客系统实现"),
     title: "Markdown博客系统实现",
     category: "科技",
     tags: ["技术", "博客", "Markdown"],
@@ -173,11 +173,11 @@ interface Article {
 \`\`\`
 ## 文件结构
 \`\`\`
-content/
-  articles/
-    7w5i.md    # 文章链接的生成原理
-    g47d.md    # Markdown博客系统实现
-  README.md    # 使用说明
+       content/
+         articles/
+           7w5i.md    # 文章链接的生成原理
+           tzh7.md    # Markdown博客系统实现
+         README.md    # 使用说明
 \`\`\`
 ## 使用说明
 1. 在\`content/articles/\`目录下创建Markdown文件
@@ -189,7 +189,7 @@ content/
 - **SEO友好**：每个文章都有独立的URL和元数据
 - **易于维护**：只需编辑Markdown文件即可更新内容
 - **版本控制**：Markdown文件可以纳入Git版本控制`,
-    slug: "tzh7"
+    slug: generateArticleHash("Markdown博客系统实现")
   }
 ]
 
