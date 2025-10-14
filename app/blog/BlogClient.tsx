@@ -440,6 +440,76 @@ export default function BlogClient({ articles, stats }: BlogClientProps) {
                 </div>
               </div>
 
+              {/* 探索部分 */}
+              <div className="mt-16 pt-8 border-t border-border">
+                <div className="text-center mb-8">
+                  <h2 className="text-2xl font-bold text-foreground mb-4">探索</h2>
+                  <p className="text-muted-foreground">发现更多有趣的工具和功能</p>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {/* Markdown编辑器工具 */}
+                  <div 
+                    className="bg-card border border-border rounded-lg p-6 hover:bg-card/80 transition-all duration-300 cursor-pointer group"
+                    onClick={() => router.push('/explore/markdown-editor')}
+                  >
+                    <div className="flex items-center mb-4">
+                      <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center mr-3">
+                        <svg className="w-5 h-5 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                        </svg>
+                      </div>
+                      <h3 className="text-lg font-semibold group-hover:text-primary transition-colors">Markdown编辑器</h3>
+                    </div>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      可视化编辑Markdown文档，实时预览，支持语法高亮和工具栏操作
+                    </p>
+                    <div className="flex items-center text-sm text-primary">
+                      <span>开始编辑</span>
+                      <svg className="w-4 h-4 ml-1 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                    </div>
+                  </div>
+
+                  {/* 占位符工具卡片 */}
+                  <div className="bg-card border border-border rounded-lg p-6 opacity-50">
+                    <div className="flex items-center mb-4">
+                      <div className="w-10 h-10 bg-muted rounded-lg flex items-center justify-center mr-3">
+                        <svg className="w-5 h-5 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                        </svg>
+                      </div>
+                      <h3 className="text-lg font-semibold text-muted-foreground">更多工具</h3>
+                    </div>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      更多实用工具即将推出...
+                    </p>
+                    <div className="flex items-center text-sm text-muted-foreground">
+                      <span>敬请期待</span>
+                    </div>
+                  </div>
+
+                  {/* 另一个占位符工具卡片 */}
+                  <div className="bg-card border border-border rounded-lg p-6 opacity-50">
+                    <div className="flex items-center mb-4">
+                      <div className="w-10 h-10 bg-muted rounded-lg flex items-center justify-center mr-3">
+                        <svg className="w-5 h-5 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+                        </svg>
+                      </div>
+                      <h3 className="text-lg font-semibold text-muted-foreground">更多工具</h3>
+                    </div>
+                    <p className="text-sm text-muted-foreground mb-4">
+                      更多实用工具即将推出...
+                    </p>
+                    <div className="flex items-center text-sm text-muted-foreground">
+                      <span>敬请期待</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
             </div>
           </main>
         </div>
