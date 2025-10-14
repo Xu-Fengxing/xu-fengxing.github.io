@@ -135,7 +135,7 @@ for i = 0 to 3:  // 生成4位代码
     slug: "7w5i"
   },
   {
-    id: "g47d",
+    id: "tzh7",
     title: "Markdown博客系统实现",
     category: "科技",
     tags: ["技术", "博客", "Markdown"],
@@ -196,7 +196,7 @@ content/
 - **SEO友好**：每个文章都有独立的URL和元数据
 - **易于维护**：只需编辑Markdown文件即可更新内容
 - **版本控制**：Markdown文件可以纳入Git版本控制`,
-    slug: "g47d"
+    slug: "tzh7"
   }
 ]
 
