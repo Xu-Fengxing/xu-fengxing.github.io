@@ -161,12 +161,32 @@ export default async function ArticleContent({ articleId }: ArticleContentProps)
                           while (i < lines.length && /^\d+\.\s/.test(lines[i])) {
                             const content = lines[i].replace(/^\d+\.\s/, '')
                             const nextLine = lines[i + 1]
-                            const isNextLineListItem = nextLine && (nextLine.startsWith('- ') || /^\d+\.\s/.test(nextLine))
-                            listItems.push(
-                              <li key={i} className={`text-foreground ${isNextLineListItem ? 'mb-1' : 'mb-3'}`}>
+                            
+                            // 检查是否有缩进的子列表
+                            let subListItems: JSX.Element[] = []
+                            let j = i + 1
+                            while (j < lines.length && lines[j].startsWith('   - ')) {
+                              subListItems.push(
+                                <li key={j} className="text-foreground mb-1">
+                                  {renderInlineMarkdown(lines[j].substring(5))}
+                                </li>
+                              )
+                              j++
+                            }
+                            
+                            const listItem = (
+                              <li key={i} className="text-foreground mb-3">
                                 {renderInlineMarkdown(content)}
+                                {subListItems.length > 0 && (
+                                  <ul className="list-disc list-inside mt-2 ml-4">
+                                    {subListItems}
+                                  </ul>
+                                )}
                               </li>
                             )
+                            
+                            listItems.push(listItem)
+                            i = j - 1 // 跳过已处理的子列表项
                             i++
                           }
                           elements.push(
