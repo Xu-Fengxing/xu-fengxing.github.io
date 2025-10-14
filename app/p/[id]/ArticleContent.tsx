@@ -5,8 +5,20 @@ interface ArticleContentProps {
   articleId: string
 }
 
-// 渲染内联Markdown（移除粗体标记）
+// 渲染内联Markdown（处理粗体标记和内联代码）
 const renderInlineMarkdown = (text: string) => {
+  // 处理内联代码
+  if (text.includes('`') && text.includes('`')) {
+    const parts = text.split('`')
+    return parts.map((part, index) => 
+      index % 2 === 1 ? (
+        <code key={index} className="bg-muted px-1 py-0.5 rounded text-sm font-mono">{part}</code>
+      ) : (
+        part
+      )
+    )
+  }
+  // 处理粗体标记
   return text.replace(/\*\*(.*?)\*\*/g, '$1')
 }
 
