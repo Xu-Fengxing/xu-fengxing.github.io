@@ -196,6 +196,16 @@ export default function BlogClient({ articles, stats }: BlogClientProps) {
       (article.content && article.content.toLowerCase().includes(searchQuery.toLowerCase()))
     
     return filterMatch && yearMatch && searchMatch
+  }).sort((a, b) => {
+    // 按日期排序，最新的在前
+    try {
+      const dateA = new Date(a.date.replace('年', '-').replace('月', '-').replace('日', ''))
+      const dateB = new Date(b.date.replace('年', '-').replace('月', '-').replace('日', ''))
+      return dateB.getTime() - dateA.getTime()
+    } catch (error) {
+      console.warn('Error parsing dates:', error)
+      return 0
+    }
   })
 
   return (
