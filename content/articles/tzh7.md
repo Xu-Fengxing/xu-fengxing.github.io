@@ -19,11 +19,11 @@ excerpt: "介绍如何将硬编码的文章系统改造为基于Markdown的灵�
 4. **格式丰富**：支持标题、列表、代码块等
 ## 系统架构设计
 ### 文件结构
-```typescript
+```
 content/
   articles/
     7w5i.md
-    g47d.md
+    tzh7.md
   README.md
 ```
 ### 代码示例

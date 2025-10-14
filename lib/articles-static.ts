@@ -171,14 +171,14 @@ interface Article {
   slug: string
 }
 \`\`\`
-## 文件结构
-\`\`\`
+       ## 文件结构
+       \`\`\`
        content/
          articles/
-           7w5i.md    # 文章链接的生成原理
-           tzh7.md    # Markdown博客系统实现
-         README.md    # 使用说明
-\`\`\`
+           7w5i.md
+           tzh7.md
+         README.md
+       \`\`\`
 ## 使用说明
 1. 在\`content/articles/\`目录下创建Markdown文件
 2. 文件名使用文章哈希值（4位36进制）
