@@ -3,8 +3,7 @@
 import { useState, useEffect } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { Sidebar } from "@/components/sidebar"
-import { ChevronDown, Search, X } from "lucide-react"
-// 移除不需要的导入
+import { ChevronDown } from "lucide-react"
 
 interface BlogClientProps {
   articles: any[]
@@ -33,73 +32,171 @@ export default function BlogClient({ articles, stats }: BlogClientProps) {
     
     if (year) {
       setSelectedYear(parseInt(year))
+    } else {
+      setSelectedYear(null)
     }
   }, [searchParams])
 
-  // 处理分类点击
-  const handleCategoryClick = (category: string) => {
-    setSelectedTag(category)
-    setSelectedYear(null)
-    router.push(`/blog?category=${encodeURIComponent(category)}`)
-  }
-
-  // 处理标签点击
-  const handleTagClick = (tag: string) => {
-    setSelectedTag(tag)
-    setSelectedYear(null)
-    router.push(`/blog?tag=${encodeURIComponent(tag)}`)
-  }
-
-  // 处理年份点击
-  const handleYearClick = (year: number) => {
-    setSelectedYear(year)
-    setSelectedTag(null)
-    router.push(`/blog?year=${year}`)
-  }
-
-  // 清除筛选
-  const clearFilters = () => {
-    setSelectedTag(null)
-    setSelectedYear(null)
-    setSearchQuery("")
-    router.push('/blog')
-  }
-
-  // 处理文章点击
-  const handleArticleClick = (article: any) => {
-    const from = searchParams.get('from') || 'blog'
-    router.push(`/p/${article.id}?from=${from}`)
-  }
-
-  // 筛选文章
-  const filteredArticles = articles.filter(article => {
-    const matchesSearch = !searchQuery || 
-      article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      article.content.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      article.tags.some((tag: string) => tag.toLowerCase().includes(searchQuery.toLowerCase()))
+  const handleTagClick = (tagName: string) => {
+    const newSelectedTag = selectedTag === tagName ? null : tagName
+    setSelectedTag(newSelectedTag)
     
-    const matchesTag = !selectedTag || 
+    // 更新URL参数，保持年份状态
+    const params = new URLSearchParams()
+    if (newSelectedTag) {
+      // 判断是分类还是标签
+      const isCategory = articles.some(article => article.category === newSelectedTag)
+      if (isCategory) {
+        params.set('category', newSelectedTag)
+      } else {
+        params.set('tag', newSelectedTag)
+      }
+    }
+    
+    // 保持年份筛选状态
+    if (selectedYear) {
+      params.set('year', selectedYear.toString())
+    }
+    
+    const newUrl = params.toString() ? `/blog?${params.toString()}` : '/blog'
+    router.push(newUrl)
+  }
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query)
+    // 如果有搜索内容，清除标签筛选
+    if (query.trim()) {
+      setSelectedTag(null)
+    }
+  }
+
+  // 高亮搜索词
+  const highlightSearchTerm = (text: string, searchTerm: string) => {
+    if (!searchTerm.trim()) return text
+    
+    const regex = new RegExp(`(${searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi')
+    const parts = text.split(regex)
+    
+    return parts.map((part, index) => 
+      regex.test(part) ? (
+        <span key={index} className="text-blue-500 font-medium">
+          {part}
+        </span>
+      ) : part
+    )
+  }
+
+  // 清理Markdown语法
+  const cleanMarkdown = (text: string) => {
+    return text
+      .replace(/#{1,6}\s+/g, '') // 移除标题标记 (### 等)，不限制行首
+      .replace(/\*\*(.*?)\*\*/g, '$1') // 移除粗体标记
+      .replace(/\*(.*?)\*/g, '$1') // 移除斜体标记
+      .replace(/`(.*?)`/g, '$1') // 移除代码标记
+      .replace(/\[([^\]]+)\]\([^)]+\)/g, '$1') // 移除链接标记，保留文本
+      .replace(/^\s*[-*+]\s+/gm, '• ') // 转换列表标记
+      .replace(/^\s*\d+\.\s+/gm, '') // 移除有序列表标记
+      .trim()
+  }
+
+  // 获取包含搜索词的片段
+  const getSearchSnippet = (content: string, searchTerm: string, maxLength: number = 100) => {
+    if (!searchTerm.trim() || !content) return null
+    
+    const index = content.toLowerCase().indexOf(searchTerm.toLowerCase())
+    if (index === -1) return null
+    
+    const start = Math.max(0, index - maxLength / 2)
+    const end = Math.min(content.length, index + searchTerm.length + maxLength / 2)
+    let snippet = content.substring(start, end)
+    
+    if (start > 0) snippet = '...' + snippet
+    if (end < content.length) snippet = snippet + '...'
+    
+    return cleanMarkdown(snippet)
+  }
+
+  // 生成文章链接的哈希值
+  const generateArticleHash = (title: string) => {
+    let hash = 0
+    for (let i = 0; i < title.length; i++) {
+      const char = title.charCodeAt(i)
+      hash = ((hash << 5) - hash) + char
+      hash = hash & hash // 转换为32位整数
+    }
+    
+    // 36进制字符集：26个小写字母 + 10个数字
+    const chars = 'abcdefghijklmnopqrstuvwxyz0123456789'
+    let result = ''
+    let num = Math.abs(hash)
+    
+    // 转换为4位36进制字符串
+    for (let i = 0; i < 4; i++) {
+      result = chars[num % 36] + result
+      num = Math.floor(num / 36)
+    }
+    
+    return result
+  }
+
+  const handleArticleClick = (article: any) => {
+    const hash = generateArticleHash(article.title)
+    console.log('文章链接:', `/p/${hash}`)
+    router.push(`/p/${hash}?from=blog`)
+  }
+
+  const handleYearClick = (year: number) => {
+    const newSelectedYear = selectedYear === year ? null : year
+    setSelectedYear(newSelectedYear)
+    
+    // 更新URL参数，保持标签状态
+    const params = new URLSearchParams()
+    if (selectedTag) {
+      // 判断是分类还是标签
+      const isCategory = articles.some(article => article.category === selectedTag)
+      if (isCategory) {
+        params.set('category', selectedTag)
+      } else {
+        params.set('tag', selectedTag)
+      }
+    }
+    
+    // 设置年份筛选状态
+    if (newSelectedYear) {
+      params.set('year', newSelectedYear.toString())
+    }
+    
+    const newUrl = params.toString() ? `/blog?${params.toString()}` : '/blog'
+    router.push(newUrl)
+  }
+
+  // 使用新的统计系统
+  const allTags = stats.categories
+  const displayedTags = showAllTags ? allTags : allTags.slice(0, 9)
+
+  // 根据选中的分类/标签、年份和搜索查询筛选文章
+  const filteredArticles = articles.filter(article => {
+    // 分类/标签筛选
+    const filterMatch = !selectedTag || 
       article.category === selectedTag || 
       article.tags.includes(selectedTag)
     
-    const matchesYear = !selectedYear || 
-      article.date.includes(selectedYear.toString())
+    // 年份筛选
+    const yearMatch = !selectedYear || (() => {
+      const yearMatch = article.date.match(/(\d{4})年/)
+      const articleYear = yearMatch ? parseInt(yearMatch[1]) : new Date().getFullYear()
+      return articleYear === selectedYear
+    })()
     
-    return matchesSearch && matchesTag && matchesYear
+    // 搜索筛选
+    const searchMatch = !searchQuery.trim() || 
+      article.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      article.category.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      article.tags.some((tag: string) => tag.toLowerCase().includes(searchQuery.toLowerCase())) ||
+      (article.content && article.content.toLowerCase().includes(searchQuery.toLowerCase()))
+    
+    return filterMatch && yearMatch && searchMatch
   })
-
-  // 按年份分组文章
-  const articlesByYear = filteredArticles.reduce((acc, article) => {
-    const year = new Date(article.date.replace('年', '-').replace('月', '-').replace('日', '')).getFullYear()
-    if (!acc[year]) {
-      acc[year] = []
-    }
-    acc[year].push(article)
-    return acc
-  }, {} as Record<number, any[]>)
-
-  // 获取所有标签
-  const allTags = Array.from(new Set(articles.flatMap(article => article.tags))).sort()
 
   return (
     <div className="min-h-screen bg-background">
@@ -107,148 +204,232 @@ export default function BlogClient({ articles, stats }: BlogClientProps) {
         <Sidebar />
         
         <div className="flex-1 lg:ml-64">
-          <main className="px-6 lg:px-12 py-16">
+          <main className="px-6 lg:px-12 py-16 h-full flex flex-col justify-center">
             <div className="max-w-6xl mx-auto w-full">
               {/* 页面标题 */}
-              <div className="mb-8">
-                <h1 className="text-3xl font-bold text-foreground mb-2">博客</h1>
-                <p className="text-muted-foreground">分享思考与见解</p>
+              <div className="text-center mb-6">
+                <h1 className="text-3xl font-bold text-foreground">博客</h1>
               </div>
 
-              {/* 搜索和筛选 */}
-              <div className="mb-8 space-y-4">
-                {/* 搜索框 */}
-                <div className="relative">
-                  <input
-                    type="text"
-                    placeholder="搜索文章..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="w-full px-4 py-2 pl-10 bg-card border border-border rounded-lg text-foreground placeholder-muted-foreground focus:outline-none focus:ring-2 focus:ring-primary"
-                  />
-                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-                </div>
+              {/* 主要内容区域 */}
+              <div className="flex gap-4">
+                {/* 博客文章列表 - 2/3宽度 */}
+                <div className="flex-1 space-y-4">
 
-                {/* 筛选标签 */}
-                <div className="flex flex-wrap gap-2">
-                  {allTags.slice(0, showAllTags ? allTags.length : 10).map((tag) => (
-                    <button
-                      key={tag}
-                      onClick={() => handleTagClick(tag)}
-                      className={`px-3 py-1 text-sm rounded-full border transition-colors ${
-                        selectedTag === tag
-                          ? 'bg-primary text-primary-foreground border-primary'
-                          : 'bg-card text-foreground border-border hover:bg-muted'
-                      }`}
-                    >
-                      #{tag}
-                    </button>
-                  ))}
-                  {allTags.length > 10 && (
-                    <button
-                      onClick={() => setShowAllTags(!showAllTags)}
-                      className="px-3 py-1 text-sm rounded-full border border-border bg-card text-foreground hover:bg-muted transition-colors"
-                    >
-                      {showAllTags ? '收起' : `更多 (${allTags.length - 10})`}
-                    </button>
+                  {/* 文章列表 */}
+                  {filteredArticles.length > 0 ? (
+                    filteredArticles.map((article) => {
+                      const searchSnippet = getSearchSnippet(article.content, searchQuery)
+                      const isContentMatch = searchQuery.trim() && article.content && 
+                        article.content.toLowerCase().includes(searchQuery.toLowerCase()) &&
+                        !article.title.toLowerCase().includes(searchQuery.toLowerCase()) &&
+                        !article.tags.some((tag: string) => tag.toLowerCase().includes(searchQuery.toLowerCase()))
+                      
+                      return (
+                        <article key={article.id} className="group cursor-pointer">
+                          <div 
+                            className={`bg-card border border-border rounded-lg hover:bg-card/80 transition-all duration-300 relative overflow-hidden ${
+                              isContentMatch ? 'h-auto min-h-20' : 'h-20'
+                            }`}
+                            onClick={() => handleArticleClick(article)}
+                          >
+                            <div className={`pl-4 pr-6 ${isContentMatch ? 'pt-[16px] pb-[12px]' : 'pt-2 pb-1'} h-full flex items-center`}>
+                              <div className="space-y-2 flex-1">
+                                <h2 className="text-lg font-semibold leading-tight group-hover:text-primary transition-colors">
+                                  {highlightSearchTerm(article.title, searchQuery)}
+                                </h2>
+                                
+                                {/* 显示搜索片段 */}
+                                {searchSnippet && isContentMatch && (
+                                  <div className="text-sm text-muted-foreground ml-1 leading-relaxed translate-y-px pl-4">
+                                    {highlightSearchTerm(searchSnippet, searchQuery)}
+                                  </div>
+                                )}
+                                
+                                <div className="flex items-center">
+                                  <span className="text-[13px] text-muted-foreground w-28">
+                                    {article.date}
+                                  </span>
+                                  <span 
+                                    onClick={(e) => {
+                                      e.stopPropagation()
+                                      handleTagClick(article.category)
+                                    }}
+                                    className={`px-1.5 py-1 text-xs font-normal leading-none rounded-sm transition-colors cursor-pointer relative ${
+                                      selectedTag === article.category 
+                                        ? 'text-primary' 
+                                        : 'text-muted-foreground hover:text-foreground'
+                                    }`}
+                                    style={{
+                                      background: selectedTag === article.category ? 'rgba(59, 130, 246, 0.2)' : 'rgba(107, 114, 128, 0.3)',
+                                      transform: 'translateY(-1px)'
+                                    }}
+                                  >
+                                    {highlightSearchTerm(article.category, searchQuery)}
+                                  </span>
+                                  <div className="flex gap-2 ml-2">
+                                    {article.tags.map((tag: string, index: number) => (
+                                      <span 
+                                        key={index}
+                                        onClick={(e) => {
+                                          e.stopPropagation()
+                                          handleTagClick(tag)
+                                        }}
+                                        className={`text-[13px] transition-colors cursor-pointer ${
+                                          selectedTag === tag 
+                                            ? 'text-primary font-medium' 
+                                            : 'text-muted-foreground hover:text-foreground'
+                                        }`}
+                                      >
+                                        #{highlightSearchTerm(tag, searchQuery)}
+                                      </span>
+                                    ))}
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                            <div className="absolute inset-x-0 bottom-0 h-0.5 bg-primary scale-x-0 group-hover:scale-x-100 transition-transform origin-left" />
+                          </div>
+                        </article>
+                      )
+                    })
+                  ) : (
+                    <div className="text-center py-8 text-muted-foreground">
+                      没有找到相关文章
+                    </div>
                   )}
                 </div>
 
-                {/* 清除筛选 */}
-                {(selectedTag || selectedYear || searchQuery) && (
-                  <button
-                    onClick={clearFilters}
-                    className="flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
-                  >
-                    <X className="h-4 w-4" />
-                    清除筛选
-                  </button>
-                )}
-              </div>
-
-              {/* 文章列表 */}
-              <div className="space-y-8">
-                {Object.keys(articlesByYear).length === 0 ? (
-                  <div className="text-center py-12">
-                    <p className="text-muted-foreground">没有找到符合条件的文章</p>
-                  </div>
-                ) : (
-                  Object.entries(articlesByYear)
-                    .sort(([a], [b]) => parseInt(b) - parseInt(a))
-                    .map(([year, yearArticles]) => (
-                      <div key={year} className="space-y-4">
-                        <h2 className="text-xl font-semibold text-foreground flex items-center gap-2">
+                {/* 右侧边栏 - 1/3宽度 */}
+                <div className="w-80 space-y-4">
+                  {/* 搜索功能 */}
+                  <div className="bg-card border border-border rounded-lg p-4">
+                    <h3 className="text-lg font-semibold mb-4 ml-1">搜索文章</h3>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        placeholder="搜索文章标题或内容..."
+                        value={searchQuery}
+                        onChange={(e) => handleSearch(e.target.value)}
+                        className="w-full px-3 py-2 text-sm bg-muted border border-border rounded-md focus:outline-none focus:ring-0 focus:border-border"
+                      />
+                      <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                        {searchQuery ? (
                           <button
-                            onClick={() => handleYearClick(parseInt(year))}
-                            className={`px-3 py-1 text-sm rounded-full border transition-colors ${
-                              selectedYear === parseInt(year)
-                                ? 'bg-primary text-primary-foreground border-primary'
-                                : 'bg-card text-foreground border-border hover:bg-muted'
+                            onClick={() => handleSearch("")}
+                            className="h-4 w-4 text-muted-foreground hover:text-foreground transition-colors"
+                          >
+                            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                          </button>
+                        ) : (
+                          <svg className="h-4 w-4 text-muted-foreground" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                          </svg>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* 所有分类 */}
+                  <div className="bg-card border border-border rounded-lg p-4 pr-6 relative">
+                    <h3 className="text-lg font-semibold mb-4 ml-1">所有分类</h3>
+                    <div className="relative">
+                      <div className="grid grid-cols-3 gap-x-4 gap-y-2 ml-1">
+                        {displayedTags.map((tag, index) => (
+                          <div 
+                            key={index}
+                            onClick={() => handleTagClick(tag.name)}
+                            className={`flex items-center justify-between cursor-pointer transition-colors ${
+                              selectedTag === tag.name 
+                                ? 'text-primary' 
+                                : 'text-foreground hover:text-primary'
                             }`}
                           >
-                            {year}
-                          </button>
-                          <span className="text-muted-foreground">({(yearArticles as any[]).length} 篇)</span>
-                        </h2>
-                        
-                        <div className="grid gap-4">
-                          {yearArticles.map((article) => (
-                            <article
-                              key={article.id}
-                              onClick={() => handleArticleClick(article)}
-                              className="bg-card border border-border rounded-lg p-6 cursor-pointer hover:bg-muted/50 transition-colors"
-                            >
-                              <div className="flex items-start justify-between mb-3">
-                                <h3 className="text-lg font-semibold text-foreground hover:text-primary transition-colors">
-                                  {article.title}
-                                </h3>
-                                <span className="text-sm text-muted-foreground ml-4 flex-shrink-0">
-                                  {article.date}
-                                </span>
-                              </div>
-                              
-                              <p className="text-muted-foreground mb-4 line-clamp-2">
-                                {article.excerpt}
-                              </p>
-                              
-                              <div className="flex items-center gap-4 text-sm">
-                                <span 
-                                  onClick={(e) => {
-                                    e.stopPropagation()
-                                    handleCategoryClick(article.category)
-                                  }}
-                                  className="px-2 py-1 bg-muted text-muted-foreground rounded text-xs cursor-pointer hover:bg-muted/80 transition-colors"
-                                >
-                                  {article.category}
-                                </span>
-                                
-                                <div className="flex gap-2">
-                                  {article.tags.slice(0, 3).map((tag: string) => (
-                                    <span
-                                      key={tag}
-                                      onClick={(e) => {
-                                        e.stopPropagation()
-                                        handleTagClick(tag)
-                                      }}
-                                      className="text-muted-foreground cursor-pointer hover:text-foreground transition-colors"
-                                    >
-                                      #{tag}
-                                    </span>
-                                  ))}
-                                  {article.tags.length > 3 && (
-                                    <span className="text-muted-foreground">
-                                      +{article.tags.length - 3}
-                                    </span>
-                                  )}
-                                </div>
-                              </div>
-                            </article>
-                          ))}
-                        </div>
+                            <span className="text-sm truncate">
+                              {tag.name}
+                            </span>
+                            <span className="text-xs text-muted-foreground ml-2 flex-shrink-0">
+                              {tag.count}
+                            </span>
+                          </div>
+                        ))}
                       </div>
-                    ))
-                )}
+                      
+                      {/* 虚化遮罩层 */}
+                      {!showAllTags && (
+                        <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-card to-transparent pointer-events-none"></div>
+                      )}
+                    </div>
+                    
+                    {allTags.length > 9 && (
+                      <button
+                        onClick={() => setShowAllTags(!showAllTags)}
+                        className="flex items-center justify-center gap-1 text-sm text-muted-foreground hover:text-primary transition-colors mt-3 w-full py-2 bg-muted/50 rounded-md hover:bg-muted"
+                      >
+                        {showAllTags ? '收起' : '查看全部'}
+                        <ChevronDown 
+                          className={`h-4 w-4 transition-transform ${showAllTags ? 'rotate-180' : ''}`} 
+                        />
+                      </button>
+                    )}
+                  </div>
+
+                  {/* 最新文章 */}
+                  <div className="bg-card border border-border rounded-lg p-4 pr-6">
+                    <h3 className="text-lg font-semibold mb-4 ml-1">最新文章</h3>
+                    <div className="space-y-3 ml-1">
+                      {articles.slice(0, 5).map((article: any, index: number) => (
+                        <div key={index} className="group cursor-pointer" onClick={() => handleArticleClick(article)}>
+                          <h4 className="text-sm font-medium group-hover:text-primary transition-colors line-clamp-1">
+                            {article.title}
+                          </h4>
+                          <p className="text-xs text-muted-foreground mt-1">{article.date}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* 归档 */}
+                  <div className="bg-card border border-border rounded-lg p-4 pr-6">
+                    <h3 className="text-lg font-semibold mb-4 ml-1">文章归档</h3>
+                    <div className="space-y-2 ml-1">
+                      {Object.entries(articles.reduce((acc, article) => {
+                        // 解析中文日期格式 "2025年10月12日"
+                        const yearMatch = article.date.match(/(\d{4})年/)
+                        const year = yearMatch ? parseInt(yearMatch[1]) : new Date().getFullYear()
+                        if (!acc[year]) {
+                          acc[year] = []
+                        }
+                        acc[year].push(article)
+                        return acc
+                      }, {} as Record<number, typeof articles>))
+                        .sort(([a], [b]) => Number(b) - Number(a))
+                        .map(([year, yearArticles]) => {
+                          const isSelected = selectedYear === Number(year)
+                          return (
+                            <div 
+                              key={year} 
+                              className={`flex justify-between items-center cursor-pointer transition-colors ${
+                                isSelected 
+                                  ? 'text-primary' 
+                                  : 'hover:text-primary'
+                              }`}
+                              onClick={() => handleYearClick(Number(year))}
+                            >
+                              <span className="text-sm">{year}年</span>
+                              <span className="text-xs text-muted-foreground">
+                                {(yearArticles as any[]).length}
+                              </span>
+                            </div>
+                          )
+                        })}
+                    </div>
+                  </div>
+                </div>
               </div>
+
             </div>
           </main>
         </div>
