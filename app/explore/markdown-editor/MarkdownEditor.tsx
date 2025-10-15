@@ -18,251 +18,313 @@ import {
   Save,
   Download,
   Eye,
-  Edit3
+  Edit3,
+  Type
 } from 'lucide-react'
 
 interface MarkdownEditorProps {}
 
 export default function MarkdownEditor({}: MarkdownEditorProps) {
-  const [content, setContent] = useState(`# Markdown编辑器
+  const [content, setContent] = useState('')
 
-欢迎使用Markdown可视化编辑器！
-
-## 功能特性
-
-- **实时预览**：左侧编辑，右侧预览
-- **语法高亮**：支持Markdown语法高亮
-- **工具栏**：快速插入常用格式
-- **文件操作**：保存和下载功能
-
-### 支持的语法
-
-1. **标题**：使用 # 创建标题
-2. **粗体**：使用 **文本** 创建粗体
-3. **斜体**：使用 *文本* 创建斜体
-4. **列表**：使用 - 或 1. 创建列表
-5. **代码**：使用 \`代码\` 或 \`\`\`代码块\`\`\`
-6. **链接**：使用 [文本](链接) 创建链接
-
-### 示例代码块
-
-\`\`\`typescript
-function hello() {
-  console.log("Hello, Markdown Editor!");
-}
-\`\`\`
-
-> 这是一个引用块示例
-
----
-
-开始编辑您的Markdown文档吧！`)
-
-  const [showPreview, setShowPreview] = useState(true)
+  const [showSource, setShowSource] = useState(true)
   const [fileName, setFileName] = useState('untitled.md')
-  const textareaRef = useRef<HTMLTextAreaElement>(null)
+  const editorRef = useRef<HTMLDivElement>(null)
+  const updateTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
-  // 工具栏功能
+  // 初始化编辑器内容
+  useEffect(() => {
+    if (editorRef.current) {
+      const html = content ? renderMarkdownToHtml(content) : '<p><br></p>'
+      editorRef.current.innerHTML = html
+    }
+  }, [content])
+
+  // 工具栏功能 - 可视化编辑
   const insertText = (before: string, after: string = '', placeholder: string = '') => {
-    const textarea = textareaRef.current
-    if (!textarea) return
+    const editor = editorRef.current
+    if (!editor) return
 
-    const start = textarea.selectionStart
-    const end = textarea.selectionEnd
-    const selectedText = content.substring(start, end)
+    const selection = window.getSelection()
+    if (!selection || selection.rangeCount === 0) return
+
+    const range = selection.getRangeAt(0)
+    const selectedText = selection.toString()
     const textToInsert = selectedText || placeholder
 
-    const newContent = 
-      content.substring(0, start) + 
-      before + textToInsert + after + 
-      content.substring(end)
-
-    setContent(newContent)
+    // 创建新的文本节点
+    const textNode = document.createTextNode(before + textToInsert + after)
+    
+    // 删除选中的内容
+    range.deleteContents()
+    
+    // 插入新内容
+    range.insertNode(textNode)
 
     // 设置光标位置
-    setTimeout(() => {
-      const newCursorPos = start + before.length + textToInsert.length
-      textarea.focus()
-      textarea.setSelectionRange(newCursorPos, newCursorPos)
-    }, 0)
+    const newRange = document.createRange()
+    newRange.setStartAfter(textNode)
+    newRange.collapse(true)
+    selection.removeAllRanges()
+    selection.addRange(newRange)
+
+    // 更新内容状态
+    updateContentFromEditor()
+  }
+
+  // 从编辑器获取内容并更新状态（防抖版本）
+  const updateContentFromEditor = () => {
+    if (updateTimeoutRef.current) {
+      clearTimeout(updateTimeoutRef.current)
+    }
+    
+    updateTimeoutRef.current = setTimeout(() => {
+      const editor = editorRef.current
+      if (!editor) return
+
+      const markdownContent = convertHtmlToMarkdown(editor.innerHTML)
+      setContent(markdownContent)
+    }, 300) // 300ms 防抖
+  }
+
+  // 立即更新内容（用于工具栏操作）
+  const updateContentImmediately = () => {
+    if (updateTimeoutRef.current) {
+      clearTimeout(updateTimeoutRef.current)
+    }
+    
+    const editor = editorRef.current
+    if (!editor) return
+
+    const markdownContent = convertHtmlToMarkdown(editor.innerHTML)
+    setContent(markdownContent)
+  }
+
+  // 简单的HTML到Markdown转换
+  const convertHtmlToMarkdown = (html: string): string => {
+    let markdown = html
+      .replace(/<h1[^>]*>(.*?)<\/h1>/gi, '# $1\n')
+      .replace(/<h2[^>]*>(.*?)<\/h2>/gi, '## $1\n')
+      .replace(/<h3[^>]*>(.*?)<\/h3>/gi, '### $1\n')
+      .replace(/<h4[^>]*>(.*?)<\/h4>/gi, '#### $1\n')
+      .replace(/<strong[^>]*>(.*?)<\/strong>/gi, '**$1**')
+      .replace(/<em[^>]*>(.*?)<\/em>/gi, '*$1*')
+      .replace(/<code[^>]*>(.*?)<\/code>/gi, '`$1`')
+      .replace(/<a[^>]*href="([^"]*)"[^>]*>(.*?)<\/a>/gi, '[$2]($1)')
+      .replace(/<img[^>]*src="([^"]*)"[^>]*alt="([^"]*)"[^>]*>/gi, '![$2]($1)')
+      .replace(/<blockquote[^>]*>(.*?)<\/blockquote>/gi, (match, content) => {
+        return content.split('\n').map((line: string) => `> ${line.trim()}`).join('\n')
+      })
+      .replace(/<ul[^>]*>(.*?)<\/ul>/gis, (match, content) => {
+        return content.replace(/<li[^>]*>(.*?)<\/li>/gi, '- $1\n')
+      })
+      .replace(/<ol[^>]*>(.*?)<\/ol>/gis, (match, content) => {
+        let counter = 1
+        return content.replace(/<li[^>]*>(.*?)<\/li>/gi, () => `${counter++}. $1\n`)
+      })
+      .replace(/<br\s*\/?>/gi, '\n')
+      .replace(/<p[^>]*>(.*?)<\/p>/gi, '$1\n')
+      .replace(/<div[^>]*>(.*?)<\/div>/gi, '$1\n')
+      .replace(/\n\s*\n/g, '\n\n')
+      .trim()
+
+    return markdown
+  }
+
+  // 改进的Markdown到HTML转换
+  const renderMarkdownToHtml = (markdown: string): string => {
+    if (!markdown.trim()) return '<p><br></p>'
+    
+    // 按行处理，保持正确的顺序
+    const lines = markdown.split('\n')
+    let html = ''
+    let inCodeBlock = false
+    let codeBlockContent = ''
+    
+    for (let i = 0; i < lines.length; i++) {
+      const line = lines[i]
+      
+      // 处理代码块
+      if (line.trim().startsWith('```')) {
+        if (inCodeBlock) {
+          // 结束代码块
+          html += `<pre style="background: rgba(0,0,0,0.1); padding: 1rem; border-radius: 4px; overflow-x: auto; margin: 1rem 0;"><code style="font-family: monospace; white-space: pre; color: inherit;">${codeBlockContent}</code></pre>`
+          codeBlockContent = ''
+          inCodeBlock = false
+        } else {
+          // 开始代码块
+          inCodeBlock = true
+        }
+        continue
+      }
+      
+      if (inCodeBlock) {
+        codeBlockContent += line + '\n'
+        continue
+      }
+      
+      // 处理标题
+      if (line.startsWith('# ')) {
+        html += `<h1 style="font-size: 2rem; font-weight: bold; margin: 1.5rem 0 1rem 0; line-height: 1.2;">${line.substring(2)}</h1>`
+      } else if (line.startsWith('## ')) {
+        html += `<h2 style="font-size: 1.5rem; font-weight: bold; margin: 1.2rem 0 0.8rem 0; line-height: 1.3;">${line.substring(3)}</h2>`
+      } else if (line.startsWith('### ')) {
+        html += `<h3 style="font-size: 1.25rem; font-weight: bold; margin: 1rem 0 0.6rem 0; line-height: 1.4;">${line.substring(4)}</h3>`
+      } else if (line.startsWith('#### ')) {
+        html += `<h4 style="font-size: 1.1rem; font-weight: bold; margin: 0.8rem 0 0.5rem 0; line-height: 1.4;">${line.substring(5)}</h4>`
+      } else if (line.startsWith('> ')) {
+        html += `<blockquote style="border-left: 4px solid #ccc; margin: 1rem 0; padding: 0.5rem 0 0.5rem 1rem; font-style: italic; color: #666; background: rgba(0,0,0,0.1);">${line.substring(2)}</blockquote>`
+      } else if (line.startsWith('- ')) {
+        html += `<li style="margin: 0.25rem 0; list-style-type: disc;">${line.substring(2)}</li>`
+      } else if (/^\d+\. /.test(line)) {
+        html += `<li style="margin: 0.25rem 0; list-style-type: decimal;">${line.replace(/^\d+\. /, '')}</li>`
+      } else if (line.trim() === '') {
+        html += '<br>'
+      } else {
+        // 处理段落内容
+        let processedLine = line
+          .replace(/\*\*(.*?)\*\*/g, '<strong style="font-weight: bold;">$1</strong>')
+          .replace(/\*(.*?)\*/g, '<em style="font-style: italic;">$1</em>')
+          .replace(/`(.*?)`/g, '<code style="background: rgba(0,0,0,0.1); padding: 0.2rem 0.4rem; border-radius: 3px; font-family: monospace; font-size: 0.9em; color: inherit;">$1</code>')
+          .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" style="color: #0066cc; text-decoration: underline;">$1</a>')
+          .replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" style="max-width: 100%; height: auto; border-radius: 8px; margin: 0.5rem 0;" />')
+        
+        html += `<p style="margin: 0.5rem 0; line-height: 1.6;">${processedLine}</p>`
+      }
+    }
+    
+    // 包装列表项
+    html = html.replace(/(<li[^>]*>.*?<\/li>)/gs, '<ul style="margin: 1rem 0; padding-left: 2rem;">$1</ul>')
+    
+    return html || '<p><br></p>'
+  }
+
+  // 可视化编辑的工具栏功能
+  const formatText = (command: string, value?: string) => {
+    const editor = editorRef.current
+    if (!editor) return
+
+    editor.focus()
+    document.execCommand(command, false, value)
+    updateContentImmediately()
   }
 
   const toolbarActions = [
     {
       icon: Heading1,
       label: 'H1',
-      action: () => insertText('# ', '', '标题')
+      action: () => formatText('formatBlock', 'h1')
     },
     {
       icon: Heading2,
       label: 'H2',
-      action: () => insertText('## ', '', '标题')
+      action: () => formatText('formatBlock', 'h2')
     },
     {
       icon: Heading3,
       label: 'H3',
-      action: () => insertText('### ', '', '标题')
+      action: () => formatText('formatBlock', 'h3')
     },
     {
       icon: Bold,
       label: '粗体',
-      action: () => insertText('**', '**', '粗体文本')
+      action: () => formatText('bold')
     },
     {
       icon: Italic,
       label: '斜体',
-      action: () => insertText('*', '*', '斜体文本')
+      action: () => formatText('italic')
     },
     {
       icon: List,
       label: '列表',
-      action: () => insertText('- ', '', '列表项')
+      action: () => formatText('insertUnorderedList')
     },
     {
       icon: ListOrdered,
       label: '有序列表',
-      action: () => insertText('1. ', '', '列表项')
+      action: () => formatText('insertOrderedList')
     },
     {
       icon: Code,
       label: '代码',
-      action: () => insertText('`', '`', '代码')
+      action: () => {
+        const editor = editorRef.current
+        if (!editor) return
+
+        editor.focus()
+        const selection = window.getSelection()
+        if (selection && selection.toString()) {
+          const range = selection.getRangeAt(0)
+          const code = document.createElement('code')
+          code.style.background = 'rgba(0,0,0,0.1)'
+          code.style.padding = '0.2rem 0.4rem'
+          code.style.borderRadius = '3px'
+          code.style.fontFamily = 'monospace'
+          code.style.color = 'inherit'
+          code.textContent = selection.toString()
+          range.deleteContents()
+          range.insertNode(code)
+          updateContentImmediately()
+        } else {
+          // 如果没有选中文本，插入代码标记
+          document.execCommand('insertText', false, '`代码`')
+          updateContentImmediately()
+        }
+      }
     },
     {
       icon: Quote,
       label: '引用',
-      action: () => insertText('> ', '', '引用文本')
+      action: () => formatText('formatBlock', 'blockquote')
     },
     {
       icon: Link,
       label: '链接',
-      action: () => insertText('[', '](url)', '链接文本')
+      action: () => {
+        const url = prompt('请输入链接地址:')
+        if (url) {
+          formatText('createLink', url)
+        }
+      }
     },
     {
       icon: Image,
       label: '图片',
-      action: () => insertText('![', '](url)', '图片描述')
+      action: () => {
+        const url = prompt('请输入图片地址:')
+        const alt = prompt('请输入图片描述:')
+        if (url) {
+          const img = document.createElement('img')
+          img.src = url
+          img.alt = alt || ''
+          img.className = 'max-w-full h-auto rounded-lg my-2'
+          
+          const selection = window.getSelection()
+          if (selection && selection.rangeCount > 0) {
+            const range = selection.getRangeAt(0)
+            range.deleteContents()
+            range.insertNode(img)
+            updateContentImmediately()
+          }
+        }
+      }
+    },
+    {
+      icon: Type,
+      label: '普通文本',
+      action: () => {
+        const editor = editorRef.current
+        if (!editor) return
+
+        editor.focus()
+        // 清除所有格式，回归普通文本
+        document.execCommand('removeFormat', false)
+        updateContentImmediately()
+      }
     }
   ]
 
-  // 渲染Markdown预览
-  const renderMarkdown = (text: string) => {
-    const lines = text.split('\n')
-    const elements: JSX.Element[] = []
-    let i = 0
-
-    while (i < lines.length) {
-      const line = lines[i]
-
-      // 处理代码块
-      if (line.trim().startsWith('```')) {
-        const language = line.trim().replace('```', '').trim()
-        const codeLines: string[] = []
-        i++
-
-        while (i < lines.length && !lines[i].trim().startsWith('```')) {
-          codeLines.push(lines[i])
-          i++
-        }
-
-        elements.push(
-          <pre key={i} className="bg-muted/30 rounded-lg p-4 overflow-x-auto my-4">
-            <code className="text-sm font-mono">{codeLines.join('\n')}</code>
-          </pre>
-        )
-        i++
-        continue
-      }
-
-      // 处理标题
-      if (line.startsWith('# ')) {
-        elements.push(<h1 key={i} className="text-2xl font-bold text-foreground mb-4 mt-6">{line.substring(2)}</h1>)
-      } else if (line.startsWith('## ')) {
-        elements.push(<h2 key={i} className="text-xl font-semibold text-foreground mb-3 mt-5">{line.substring(3)}</h2>)
-      } else if (line.startsWith('### ')) {
-        elements.push(<h3 key={i} className="text-lg font-medium text-foreground mb-2 mt-4">{line.substring(4)}</h3>)
-      } else if (line.startsWith('#### ')) {
-        elements.push(<h4 key={i} className="text-base font-medium text-foreground mb-2 mt-3">{line.substring(5)}</h4>)
-      } else if (line.startsWith('- ')) {
-        // 处理无序列表
-        const listItems: JSX.Element[] = []
-        while (i < lines.length && lines[i].startsWith('- ')) {
-          listItems.push(
-            <li key={i} className="text-foreground mb-1">
-              {renderInlineMarkdown(lines[i].substring(2))}
-            </li>
-          )
-          i++
-        }
-        elements.push(
-          <ul key={`ul-${i}`} className="list-disc list-inside mb-4 ml-4">
-            {listItems}
-          </ul>
-        )
-        continue
-      } else if (/^\d+\.\s/.test(line)) {
-        // 处理有序列表
-        const listItems: JSX.Element[] = []
-        while (i < lines.length && /^\d+\.\s/.test(lines[i])) {
-          const content = lines[i].replace(/^\d+\.\s/, '')
-          listItems.push(
-            <li key={i} className="text-foreground mb-1">
-              {renderInlineMarkdown(content)}
-            </li>
-          )
-          i++
-        }
-        elements.push(
-          <ol key={`ol-${i}`} className="list-decimal list-inside mb-4 ml-4">
-            {listItems}
-          </ol>
-        )
-        continue
-      } else if (line.startsWith('> ')) {
-        elements.push(
-          <blockquote key={i} className="border-l-4 border-primary/30 pl-4 py-2 my-4 bg-muted/20">
-            <p className="text-foreground italic">{renderInlineMarkdown(line.substring(2))}</p>
-          </blockquote>
-        )
-      } else if (line.trim() === '') {
-        elements.push(<br key={i} />)
-      } else {
-        elements.push(
-          <p key={i} className="text-foreground mb-3 leading-relaxed">
-            {renderInlineMarkdown(line)}
-          </p>
-        )
-      }
-
-      i++
-    }
-
-    return elements
-  }
-
-  // 渲染内联Markdown
-  const renderInlineMarkdown = (text: string) => {
-    // 处理内联代码
-    if (text.includes('`')) {
-      const parts = text.split('`')
-      return parts.map((part, index) => 
-        index % 2 === 1 ? (
-          <code key={index} className="bg-muted/20 px-1 py-0.5 rounded text-sm font-mono text-muted-foreground">{part}</code>
-        ) : (
-          part
-        )
-      )
-    }
-    
-    // 处理粗体和斜体
-    let result = text
-    result = result.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-    result = result.replace(/\*(.*?)\*/g, '<em>$1</em>')
-    result = result.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" class="text-primary hover:underline" target="_blank" rel="noopener noreferrer">$1</a>')
-    result = result.replace(/!\[([^\]]*)\]\(([^)]+)\)/g, '<img src="$2" alt="$1" class="max-w-full h-auto rounded-lg my-2" />')
-    
-    return <span dangerouslySetInnerHTML={{ __html: result }} />
-  }
 
   // 保存文件
   const saveFile = () => {
@@ -297,10 +359,10 @@ function hello() {
             <Button
               variant="outline"
               size="sm"
-              onClick={() => setShowPreview(!showPreview)}
+              onClick={() => setShowSource(!showSource)}
             >
-              {showPreview ? <Edit3 className="w-4 h-4 mr-2" /> : <Eye className="w-4 h-4 mr-2" />}
-              {showPreview ? '仅编辑' : '预览'}
+              {showSource ? <Edit3 className="w-4 h-4 mr-2" /> : <Eye className="w-4 h-4 mr-2" />}
+              {showSource ? '仅编辑' : '源代码'}
             </Button>
             <Button
               variant="outline"
@@ -330,31 +392,36 @@ function hello() {
       </Card>
 
       {/* 编辑器区域 */}
-      <div className={`grid gap-6 ${showPreview ? 'grid-cols-1 lg:grid-cols-2' : 'grid-cols-1'}`}>
-        {/* 编辑区域 */}
+      <div className={`grid gap-6 ${showSource ? 'grid-cols-1 lg:grid-cols-2' : 'grid-cols-1'}`}>
+        {/* 可视化编辑区域 */}
         <Card className="p-0">
           <div className="p-4 border-b border-border">
-            <h3 className="text-lg font-semibold">编辑器</h3>
+            <h3 className="text-lg font-semibold">可视化编辑器</h3>
           </div>
-          <textarea
-            ref={textareaRef}
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            className="w-full h-[600px] p-4 bg-background border-0 resize-none focus:outline-none font-mono text-sm leading-relaxed"
-            placeholder="开始编写您的Markdown文档..."
+          <div
+            ref={editorRef}
+            contentEditable
+            suppressContentEditableWarning
+            onInput={updateContentFromEditor}
+            className="w-full h-[600px] p-4 bg-background border-0 resize-none focus:outline-none text-sm leading-relaxed overflow-y-auto"
+            style={{ 
+              minHeight: '600px',
+              wordWrap: 'break-word',
+              overflowWrap: 'break-word'
+            }}
           />
         </Card>
 
-        {/* 预览区域 */}
-        {showPreview && (
+        {/* 源代码预览区域 */}
+        {showSource && (
           <Card className="p-0">
             <div className="p-4 border-b border-border">
-              <h3 className="text-lg font-semibold">预览</h3>
+              <h3 className="text-lg font-semibold">Markdown源代码</h3>
             </div>
             <div className="p-4 h-[600px] overflow-y-auto">
-              <div className="prose prose-invert max-w-none">
-                {renderMarkdown(content)}
-              </div>
+              <pre className="text-sm font-mono text-foreground whitespace-pre-wrap">
+                {content}
+              </pre>
             </div>
           </Card>
         )}

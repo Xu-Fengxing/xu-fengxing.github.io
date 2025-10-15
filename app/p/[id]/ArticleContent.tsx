@@ -209,7 +209,11 @@ export default async function ArticleContent({ articleId }: ArticleContentProps)
                             </p>
                           )
                         } else if (line.trim() === '') {
-                          elements.push(<br key={i} />)
+                          // 只在段落之间保留空行，连续空行只保留一个
+                          const prevElement = elements[elements.length - 1]
+                          if (prevElement && prevElement.type !== 'br') {
+                            elements.push(<br key={i} />)
+                          }
                         } else {
                           // 检查下一行是否是标题，如果是则增加底部间距
                           const nextLine = lines[i + 1]
