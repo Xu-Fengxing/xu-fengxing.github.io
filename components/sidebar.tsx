@@ -1,13 +1,12 @@
 "use client"
 
-import { Home, FileText, ExternalLink, Info, Compass } from "lucide-react"
+import { Home, FileText, ExternalLink, Info } from "lucide-react"
 import { cn } from "@/lib/utils"
 import { useRouter, usePathname } from "next/navigation"
 
 const navItems = [
   { icon: Home, label: "首页", active: true },
   { icon: FileText, label: "博客", active: false },
-  { icon: Compass, label: "探索", active: false },
   { icon: ExternalLink, label: "链接", active: false },
   { icon: Info, label: "关于", active: false },
 ]
@@ -23,15 +22,13 @@ export function Sidebar() {
         return "首页"
       case "/blog":
         return "博客"
-      case "/explore":
-        return "探索"
       case "/links":
         return "链接"
       case "/about":
         return "关于"
       default:
-        // 如果是文章页面（/p/xxxx）或探索子页面，不显示任何高亮
-        if (pathname.startsWith("/p/") || pathname.startsWith("/explore/")) {
+        // 如果是文章页面（/p/xxxx），不显示任何高亮
+        if (pathname.startsWith("/p/")) {
           return null
         }
         return "首页"
@@ -47,9 +44,6 @@ export function Sidebar() {
         break
       case "博客":
         router.push("/blog")
-        break
-      case "探索":
-        router.push("/explore")
         break
       case "链接":
         router.push("/links")
