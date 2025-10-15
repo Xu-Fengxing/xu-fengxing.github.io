@@ -26,19 +26,23 @@ interface MarkdownEditorProps {}
 
 export default function MarkdownEditor({}: MarkdownEditorProps) {
   const [content, setContent] = useState('')
+  const [isUpdating, setIsUpdating] = useState(false)
 
   const [showSource, setShowSource] = useState(true)
-  const [fileName, setFileName] = useState('untitled.md')
+  const [fileName, setFileName] = useState('untitled')
   const editorRef = useRef<HTMLDivElement>(null)
   const updateTimeoutRef = useRef<NodeJS.Timeout | null>(null)
 
   // 初始化编辑器内容
   useEffect(() => {
-    if (editorRef.current) {
+    if (editorRef.current && !isUpdating) {
       const html = content ? renderMarkdownToHtml(content) : '<p><br></p>'
-      editorRef.current.innerHTML = html
+      // 只有当内容真正不同时才更新
+      if (editorRef.current.innerHTML !== html) {
+        editorRef.current.innerHTML = html
+      }
     }
-  }, [content])
+  }, [content, isUpdating]) // 监听内容变化，但避免在更新过程中执行
 
   // 工具栏功能 - 可视化编辑
   const insertText = (before: string, after: string = '', placeholder: string = '') => {
@@ -74,6 +78,8 @@ export default function MarkdownEditor({}: MarkdownEditorProps) {
 
   // 从编辑器获取内容并更新状态（防抖版本）
   const updateContentFromEditor = () => {
+    if (isUpdating) return // 如果正在更新，跳过
+    
     if (updateTimeoutRef.current) {
       clearTimeout(updateTimeoutRef.current)
     }
@@ -82,9 +88,14 @@ export default function MarkdownEditor({}: MarkdownEditorProps) {
       const editor = editorRef.current
       if (!editor) return
 
+      setIsUpdating(true)
       const markdownContent = convertHtmlToMarkdown(editor.innerHTML)
-      setContent(markdownContent)
-    }, 300) // 300ms 防抖
+      // 只有当内容真正改变时才更新状态
+      if (markdownContent !== content) {
+        setContent(markdownContent)
+      }
+      setIsUpdating(false)
+    }, 800) // 增加到800ms防抖
   }
 
   // 立即更新内容（用于工具栏操作）
@@ -332,7 +343,7 @@ export default function MarkdownEditor({}: MarkdownEditorProps) {
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = fileName
+    a.download = `${fileName}.md`
     document.body.appendChild(a)
     a.click()
     document.body.removeChild(a)
@@ -395,7 +406,7 @@ export default function MarkdownEditor({}: MarkdownEditorProps) {
       <div className={`grid gap-6 ${showSource ? 'grid-cols-1 lg:grid-cols-2' : 'grid-cols-1'}`}>
         {/* 可视化编辑区域 */}
         <Card className="p-0">
-          <div className="p-4 border-b border-border">
+          <div className="px-4 py-3 border-b border-border">
             <h3 className="text-lg font-semibold">可视化编辑器</h3>
           </div>
           <div
@@ -415,7 +426,7 @@ export default function MarkdownEditor({}: MarkdownEditorProps) {
         {/* 源代码预览区域 */}
         {showSource && (
           <Card className="p-0">
-            <div className="p-4 border-b border-border">
+            <div className="px-4 py-3 border-b border-border">
               <h3 className="text-lg font-semibold">Markdown源代码</h3>
             </div>
             <div className="p-4 h-[600px] overflow-y-auto">
