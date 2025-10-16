@@ -6,7 +6,22 @@ import { HeroModule } from "@/components/hero-module"
 import HomeContentModuleWrapper from "./home-content-module-wrapper"
 import { cn } from "@/lib/utils"
 
-export function SwipeContainer() {
+// BlogPost interface
+interface BlogPost {
+  id: string
+  title: string
+  category: string
+  tags: string[]
+  date: string
+  excerpt: string
+  slug: string
+}
+
+interface SwipeContainerProps {
+  blogPosts: BlogPost[]
+}
+
+export function SwipeContainer({ blogPosts }: SwipeContainerProps) {
   const searchParams = useSearchParams()
   const showContent = searchParams.get('show') === 'content'
   const [currentModule, setCurrentModule] = useState<'hero' | 'content'>(showContent ? 'content' : 'hero')
@@ -152,7 +167,7 @@ export function SwipeContainer() {
         }`}
         style={{ willChange: 'transform, opacity' }}
       >
-        <HomeContentModuleWrapper onScrollUp={handleScrollUp} />
+        <HomeContentModuleWrapper onScrollUp={handleScrollUp} blogPosts={blogPosts} />
       </div>
     </div>
   )
