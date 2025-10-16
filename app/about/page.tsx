@@ -63,7 +63,7 @@ export default function AboutPage() {
           <main className="px-6 lg:px-12 py-16 h-full flex flex-col justify-center">
             <div className="max-w-6xl mx-auto w-full space-y-8">
               {/* 页面标题 */}
-              <div className="text-center mb-12">
+              <div className="text-center mb-8">
                 <h1 className="text-4xl font-bold text-foreground">关于</h1>
               </div>
 
